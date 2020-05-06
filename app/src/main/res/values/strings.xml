@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">BuildMaker</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="search">Search</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="dialog_about_message">BuildMaker is the best build order crafting and management tool for SC2. It emulates economic model of SC2 game and allows you to craft your build orders without sitting next to your computer with SC2 running!
+        \n
+        \nFeatures:
+        \n
+        \n- Full support of WOL, HOTS and LOTV
+        \n- Create build orders for all game factions
+        \n- Play builds using Voice advisor!
+        \n- Full in-game economic simulation
+        \n- Save, edit, preview, share build orders
+        \n- Huge collection of PRO build orders from ImbaBuilds.com and TeamLiquid.net</string>
+
+    <string name="notification_appmarket_not_installed">Could not open Android market, please install the market app.</string>
+
+    <string name="pref_selectedConfig">selectedConfig</string>
+    <string name="pref_FavoriteBuilds">FavoriteBuilds</string>
+    <string name="pref_sort_favorites">sortFavorites</string>
+    <string name="pref_sort_date">sortDate</string>
+    <string name="pref_version_changed">versionChanged</string>
+    <string name="pref_faction_changed">factionChanged</string>
+    <string name="pref_start_second">startSecond</string>
+    <string name="pref_game_speed">gameSpeed</string>
+    <string name="pref_username">username</string>
+    <string name="pref_password">password</string>
+
+    <string name="prompt_vsfaction">Select vs Faction</string>
+
+    <string name="unable_to_add_item_message">There is no appropriate point in timeline when it is possible to build this item</string>
+    <string name="action_show_workers">Show workers</string>
+</resources>

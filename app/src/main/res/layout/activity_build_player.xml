@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/appBar"
+        layout="@layout/app_bar"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:background="#1B1B1B">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="0.3"
+            android:text="supply"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.5"
+            android:text="action"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/bdview_mutchup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="0.5"
+            android:gravity="end"
+            android:text="start/end"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000"
+        android:fastScrollEnabled="false"
+        android:listSelector="@drawable/selector"
+        android:scrollbarThumbVertical="@drawable/sb"
+        android:transcriptMode="disabled">
+
+    </ListView>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:background="#80000000"
+        android:paddingStart="10dp"
+        android:paddingLeft="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp">
+
+        <TextView android:id="@+id/txtTimer"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:gravity="center"
+                  android:textSize="18sp"
+                  android:text="00:00">
+        </TextView>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/ctlrSeekBar"
+                android:gravity="start|center"
+                android:layout_gravity="start|center_vertical"/>
+        </FrameLayout>
+
+        <TextView android:id="@+id/txtFinish"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:gravity="center"
+                  android:textSize="18sp"
+                  android:text="00:00">
+        </TextView>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <LinearLayout
+        android:id="@+id/editControls"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal|bottom|left">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.5"
+            android:background="@drawable/builder_buttonbg"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/btnReset"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:src="@drawable/stop"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="onReset"
+                android:clickable="true"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="3"
+            android:background="@drawable/builder_buttonbg"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgPlayPause"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:src="@drawable/play"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="onPlayPause"
+                android:clickable="true"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

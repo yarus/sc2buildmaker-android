@@ -1,0 +1,96 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.sc2toolslab.material.NavigationDrawerFragment">
+
+    <LinearLayout
+        android:id="@+id/imgFactionLayout"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/primaryColor">
+
+        <ImageView
+            android:id="@+id/imgFaction"
+            android:layout_width="144dp"
+            android:layout_height="144dp"
+            android:layout_marginTop="@dimen/ng_img_margin_top"
+            android:layout_marginBottom="16dp"
+            android:src="@mipmap/ic_zerg_white" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="Build Orders:" />
+
+            <TextView
+                android:id="@+id/txtVsTerran"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="ZvT - (11)" />
+
+            <TextView
+                android:id="@+id/txtVsProtoss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="ZvP - (10)" />
+
+            <TextView
+                android:id="@+id/txtVsZerg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="ZvZ - (10)" />
+
+            <TextView
+                android:id="@+id/txtAddon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="Addon: HOTS"
+                android:layout_marginTop="40dp"/>
+
+            <TextView
+                android:id="@+id/txtVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:text="Version: 2.1.9"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lstItems"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="wrap_content"
+        android:background="#212121">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

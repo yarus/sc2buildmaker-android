@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/add_frame_top_margin"
+        android:onClick="onOutOfWidnowClick"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1B1B1B">
+
+        <TextView
+            android:id="@+id/add_headertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Add Build Item"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <GridView
+        android:id="@+id/gvBuildItems"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:columnWidth="@dimen/additemwidth"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/tile_list_item_spacing"
+        android:numColumns="auto_fit"
+        android:scrollbars="vertical"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/tile_list_item_spacing"
+        android:background="#363636">
+    </GridView>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp">
+
+        <LinearLayout
+            android:id="@+id/editControlsLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|bottom|start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtCreatedLabel"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="This configuration no longer supported."
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:textStyle="bold|normal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/editControls"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal|bottom|start"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/builder_buttonbg">
+
+                <com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="match_parent"
+                                                                app:mrl_rippleAlpha="0.5"
+                                                                app:mrl_rippleColor="@color/colorHightlight"
+                                                                app:mrl_rippleHover="true"
+                                                                app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:onClick="onAddActionClick"
+                        android:tag="Unit"
+                        android:text="Units"
+                        android:textColor="#828282"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/builder_buttonbg">
+
+                <com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="match_parent"
+                                                                app:mrl_rippleAlpha="0.5"
+                                                                app:mrl_rippleColor="@color/colorHightlight"
+                                                                app:mrl_rippleDelayClick="false"
+                                                                app:mrl_rippleDuration="3"
+                                                                app:mrl_rippleHover="true"
+                                                                app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:onClick="onAddActionClick"
+                        android:tag="Building"
+                        android:text="Struct"
+                        android:textColor="#828282"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/builder_buttonbg">
+
+                <com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="match_parent"
+                                                                app:mrl_rippleAlpha="0.5"
+                                                                app:mrl_rippleColor="@color/colorHightlight"
+                                                                app:mrl_rippleDelayClick="false"
+                                                                app:mrl_rippleDuration="4"
+                                                                app:mrl_rippleHover="true"
+                                                                app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:onClick="onAddActionClick"
+                        android:tag="Upgrade"
+                        android:text="Grades"
+                        android:textColor="#828282"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/builder_buttonbg">
+
+                <com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="match_parent"
+                                                                app:mrl_rippleAlpha="0.5"
+                                                                app:mrl_rippleColor="@color/colorHightlight"
+                                                                app:mrl_rippleDelayClick="false"
+                                                                app:mrl_rippleHover="true"
+                                                                app:mrl_rippleOverlay="true">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:onClick="onAddActionClick"
+                        android:tag="Special"
+                        android:text="Special"
+                        android:textColor="#828282"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

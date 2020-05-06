@@ -1,0 +1,80 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".ui.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"
+        app:actionLayout="@layout/fragment_search"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_faction"
+        android:icon="@mipmap/ic_terran_white"
+        android:title="Faction"
+        app:showAsAction="ifRoom|collapseActionView">
+        <menu>
+            <item
+                android:id="@+id/action_faction_terran"
+                android:icon="@mipmap/ic_terran_white"
+                android:title="Terran"
+                app:showAsAction="always"/>
+
+            <item
+                android:id="@+id/action_faction_protoss"
+                android:icon="@mipmap/ic_protoss_white"
+                android:title="Protoss"
+                app:showAsAction="always"/>
+
+            <item
+                android:id="@+id/action_faction_zerg"
+                android:icon="@mipmap/ic_zerg_white"
+                android:title="Zerg"
+                app:showAsAction="always"/>
+
+            <item
+                android:id="@+id/action_faction_random"
+                android:icon="@mipmap/ic_random_white"
+                android:title="Random"
+                app:showAsAction="always"/>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_view_list"
+        android:icon="@mipmap/ic_list_view"
+        android:title="List View"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_view_tile"
+        android:icon="@mipmap/ic_tile_view"
+        android:title="Tile View"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_default_hide"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Hide Default"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_default_show"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Show Default"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_online"
+        android:icon="@android:drawable/stat_notify_sync"
+        android:title="Online Library"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+</menu>

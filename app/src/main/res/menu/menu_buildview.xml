@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".ui.BuildViewActivity">
+    <item
+        android:id="@+id/action_build_editinfo"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Edit Info"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_build_craft"
+        android:icon="@mipmap/ic_edit_build"
+        android:title="Craft"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_build_share"
+        android:icon="@android:drawable/stat_sys_upload"
+        android:title="Upload to sc2bm.com"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_build_play"
+        android:icon="@android:drawable/ic_media_play"
+        android:title="Play"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
+        android:id="@+id/action_build_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Delete"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+</menu>

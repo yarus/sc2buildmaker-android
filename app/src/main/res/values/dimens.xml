@@ -1,0 +1,24 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="navigation_drawer_width">280dp</dimen>
+
+    <dimen name="app_bar_top_padding">0dp</dimen>
+
+    <dimen name="add_frame_top_margin">90dp</dimen>
+
+    <dimen name="ng_img_margin_top">24dp</dimen>
+
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">14sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+
+    <dimen name="tile_list_item_size">153dp</dimen>
+    <dimen name="tile_list_item_spacing">1dp</dimen>
+    <dimen name="additemheight">80dp</dimen>
+    <dimen name="additemwidth">80dp</dimen>
+</resources>

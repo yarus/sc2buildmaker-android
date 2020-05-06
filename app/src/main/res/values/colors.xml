@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#333333</color>
+
+    <color name="primaryColorDark">#212121</color>
+
+    <color name="accentColor">#FF9800</color>
+
+    <color name="iconsColor">#FFFFFF</color>
+
+    <color name="colorHightlight">#B6B6B6</color>
+
+    <color name="colorPrimaryText">#3F51B5</color>
+
+    <color name="ndBackground">#FFFFFF</color>
+
+    <color name="terranBuild">#3F51B5</color>
+    <color name="terranBuildDark">#303F9F</color>
+    <color name="zergBuild">#6A1B9A</color>
+    <color name="zergBuildDark">#4A148C</color>
+    <color name="protossBuild">#EF6C00</color>
+    <color name="protossBuildDark">#E65100</color>
+    <color name="randomBuild">#009688</color>
+    <color name="randomBuildDark">#004D40</color>
+
+    <color name="blue">#00b3fe</color>
+</resources>

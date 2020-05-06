@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_bar_top_padding">24dp</dimen>
+    <dimen name="ng_img_margin_top">48dp</dimen>
+    <dimen name="add_frame_top_margin">110dp</dimen>
+</resources>

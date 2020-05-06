@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string-array name="versionsFree">
+        <item name="wol">Wings of Liberty</item>
+        <item name="hots">Heart of the Swarm</item>
+        <item name="lotv">Legacy of the Void</item>
+    </string-array>
+
+    <string-array name="versionsFull">
+        <item name="wol">Wings of Liberty</item>
+        <item name="hots">Heart of the Swarm</item>
+        <item name="lotv">Legacy of the Void</item>
+    </string-array>
+
+    <string-array name="versionsValues">
+        <item name="wol">2.0.5</item>
+        <item name="hots">2.2.0</item>
+        <item name="lotv">4.11.3</item>
+    </string-array>
+
+    <string-array name="factions">
+        <item name="Zerg">Zerg</item>
+        <item name="Terran">Terran</item>
+        <item name="Protoss">Protoss</item>
+    </string-array>
+
+    <string-array name="gameSpeed">
+        <item name="slower">Slower</item>
+        <item name="slow">Slow</item>
+        <item name="normal">Normal</item>
+        <item name="fast">Fast</item>
+        <item name="faster">Faster</item>
+    </string-array>
+
+</resources>

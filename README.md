@@ -1,2 +1,3 @@
-# sc2buildmaker-android
-SC2BuildMaker android application source code
+# sc2buildmaker
+This is home for SC2BuildMaker android tool source code.
+IDE - Android Studio

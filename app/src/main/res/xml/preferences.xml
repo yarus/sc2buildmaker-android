@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="general_category"
+        android:title="General Settings">
+
+        <ListPreference
+            android:defaultValue="4.11.3"
+            android:entries="@array/versionsFull"
+            android:entryValues="@array/versionsValues"
+            android:key="@string/pref_selectedConfig"
+            android:summary="Define which add-on configuration should be used for Build Maker"
+            android:title="SC2 Addon"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="account_category"
+        android:title="sc2bm.com Account">
+
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_username"
+            android:summary="sc2bm.com account username which used for build order upload"
+            android:title="Username"/>
+
+        <EditTextPreference
+            android:inputType="text"
+            android:key="@string/pref_password"
+            android:summary="sc2bm.com account password which used for build order upload"
+            android:title="Password"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="library_category"
+        android:title="Library settings">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_sort_favorites"
+            android:summary="Favorite builds will be on top of the list"
+            android:title="Sort Favorites"/>
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_sort_date"
+            android:summary="Build orders will be sorted by visited date"
+            android:title="Sort by Date"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="player_category"
+        android:title="Player settings">
+
+        <ListPreference
+            android:defaultValue="faster"
+            android:entries="@array/gameSpeed"
+            android:entryValues="@array/gameSpeed"
+            android:key="@string/pref_game_speed"
+            android:summary="Select game speed in a same manner as in the game"
+            android:title="Game Speed"/>
+
+        <EditTextPreference
+            android:defaultValue="5"
+            android:inputType="number"
+            android:key="@string/pref_start_second"
+            android:summary="Player will start to play build from this second"
+            android:title="Start second"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
