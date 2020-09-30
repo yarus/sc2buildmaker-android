@@ -139,7 +139,7 @@ public class CastModule extends BuildManagerModuleBase {
 		int energyGeneratorCount = stats.getStatValueByName(buildManagerConfiguration.getRaceConstants().getEnergyGeneratorBuildItemName());
 
 		for(BuildOrderProcessorItem finishedGenerator : finishedenergyGenerators) {
-			String energyGeneratorOrder = finishedGenerator.getItemName() + String.valueOf(energyGeneratorCount++);
+			String energyGeneratorOrder = finishedGenerator.getItemName() + energyGeneratorCount++;
 			stats.setItemCountForName(energyGeneratorOrder + CAST_COUNT, this.buildManagerConfiguration.getRaceConstants().getEnergyCastCountForNewEnergyGenerator());
 			stats.setItemCountForName(energyGeneratorOrder + CAST_TIMER, 0);
 		}

@@ -17,7 +17,7 @@
     <string-array name="versionsValues">
         <item name="wol">2.0.5</item>
         <item name="hots">2.2.0</item>
-        <item name="lotv">4.11.3</item>
+        <item name="lotv">5.0.3</item>
     </string-array>
 
     <string-array name="factions">

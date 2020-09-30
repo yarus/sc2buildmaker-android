@@ -32,7 +32,7 @@ public class BuildShareActivity extends Activity {
 				e.printStackTrace();
 			}
 
-			StringBuffer fileContent = new StringBuffer("");
+			StringBuffer fileContent = new StringBuffer();
 			int ch;
 			try {
 				while( (ch = stream.read()) != -1)

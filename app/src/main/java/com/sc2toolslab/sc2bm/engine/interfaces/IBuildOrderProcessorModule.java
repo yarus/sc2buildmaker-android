@@ -14,7 +14,7 @@ public interface IBuildOrderProcessorModule {
 
 	void adjustModuleStatsForStep(BuildItemStatistics stats);
 
-	void adjustModuleStatsByStartedItem(BuildOrderProcessorItem boItem, BuildItemEntity item, BuildItemStatistics stats) throws ApplicationException, ApplicationException;
+	void adjustModuleStatsByStartedItem(BuildOrderProcessorItem boItem, BuildItemEntity item, BuildItemStatistics stats) throws ApplicationException;
 
 	void adjustModuleStatsByFinishedItems(List<BuildOrderProcessorItem> finishedItems, BuildItemStatistics stats);
 

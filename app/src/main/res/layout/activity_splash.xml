@@ -12,11 +12,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:gravity="center"
         android:layout_marginTop="20dp"
-        android:text="BUILD MAKER 4.11.3"
+        android:gravity="center"
+        android:text="BUILD MAKER 5.0.3"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="22sp"/>
+        android:textSize="22sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

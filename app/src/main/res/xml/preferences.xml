@@ -7,7 +7,7 @@
         android:title="General Settings">
 
         <ListPreference
-            android:defaultValue="4.11.3"
+            android:defaultValue="5.0.3"
             android:entries="@array/versionsFull"
             android:entryValues="@array/versionsValues"
             android:key="@string/pref_selectedConfig"

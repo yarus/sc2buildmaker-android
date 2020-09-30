@@ -89,8 +89,8 @@ public class BuildItemsListAdapter extends ArrayAdapter<BuildOrderProcessorItem>
 		if (entry != null) {
 			BuildItemHolder holder = (BuildItemHolder) rowView.getTag();
 
-			holder.txtSupply.setText(String.valueOf(entry.getStatisticsProvider().getCurrentSupply()) + "/"
-					+ String.valueOf(entry.getStatisticsProvider().getMaximumSupply()));
+			holder.txtSupply.setText(entry.getStatisticsProvider().getCurrentSupply() + "/"
+					+ entry.getStatisticsProvider().getMaximumSupply());
 
 			Integer imageId = mImageProvider.getImageResourceIdByKey(entry.getItemName());
 			if (imageId != null) {

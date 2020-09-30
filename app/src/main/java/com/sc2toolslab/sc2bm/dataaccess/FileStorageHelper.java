@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -183,7 +184,7 @@ public class FileStorageHelper {
 		List<String> fileNames = new ArrayList<String>();
 		try {
 			InputStream fis = new FileInputStream(getRootDirectory() + File.separator + AppConstants.DELETED_FILES_CONFIG_NAME);
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
 			String fileName;
 			while ((fileName = br.readLine()) != null) {
 				fileNames.add(fileName);

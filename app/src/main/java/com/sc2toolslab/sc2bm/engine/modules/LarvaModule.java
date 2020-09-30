@@ -154,7 +154,7 @@ public class LarvaModule extends BuildManagerModuleBase {
 		int hatcheryCount = stats.getStatValueByName("Hatchery");
 
 		for (BuildOrderProcessorItem finishedHatchery : finishedHatcheries) {
-			String hatchOrder = finishedHatchery.getItemName() + String.valueOf(hatcheryCount++);
+			String hatchOrder = finishedHatchery.getItemName() + hatcheryCount++;
 			stats.setItemCountForName(hatchOrder + "LarvaCount", 1);
 			stats.setItemCountForName(hatchOrder + "LarvaTimer", 0);
 		}

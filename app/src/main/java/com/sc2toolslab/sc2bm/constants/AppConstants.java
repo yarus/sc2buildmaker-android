@@ -26,7 +26,7 @@ public class AppConstants {
 
 	public static final String WOL_Config = "2.0.5";
 	public static final String HOTS_Config = "2.2.0";
-	public static final String LOTV_Config = "4.11.3";
+	public static final String LOTV_Config = "5.0.3";
 
 	public static final String OutdatedVersions = "2.0.6,2.0.7,2.0.8,2.0.9,2.0.11,2.1.8,2.1.9,2.5.0,3.0.0,3.8.0,4.1.2";
 

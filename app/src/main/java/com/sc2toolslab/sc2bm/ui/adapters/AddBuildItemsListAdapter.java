@@ -90,7 +90,7 @@ public class AddBuildItemsListAdapter extends ArrayAdapter<BuildItemEntity> {
 
 			int statValue = mCurrentStats.getStatValueByName(entry.getName());
 			if (statValue > 0) {
-				itemName = itemName + " (" + String.valueOf(statValue) + ")";
+				itemName = itemName + " (" + statValue + ")";
 			}
 
 			holder.txtItemName.setText(itemName);

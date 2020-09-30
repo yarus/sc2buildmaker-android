@@ -235,6 +235,7 @@ public class BuildItemImageProvider extends BaseImageProvider<String> {
 		nameToImageId.put("AirWeaponsLevel3", R.drawable.bi_airweaponslevel3);
 		nameToImageId.put("AnionPulseCrystals", R.drawable.bi_anionpulsecrystals);
 		nameToImageId.put("ShadowStride", R.drawable.bi_shadowstride);
+		nameToImageId.put("TectonicDestabilizers", R.drawable.bi_tectonicdestabilizers);
 
 		//Zerg buildings
 		nameToImageId.put("Spire", R.drawable.bi_spire);
