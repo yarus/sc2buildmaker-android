@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -21,13 +20,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.sc2toolslab.sc2bm.R;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
@@ -37,7 +34,6 @@ import com.sc2toolslab.sc2bm.ui.presenters.MainPresenter;
 import com.sc2toolslab.sc2bm.ui.providers.BuildOrdersProvider;
 import com.sc2toolslab.sc2bm.ui.providers.FactionImageProvider;
 import com.sc2toolslab.sc2bm.ui.providers.IImageProvider;
-import com.sc2toolslab.sc2bm.ui.utils.FloatingActionButton;
 import com.sc2toolslab.sc2bm.ui.utils.NavigationManager;
 import com.sc2toolslab.sc2bm.ui.views.IMainView;
 
@@ -50,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 	private DrawerLayout mDrawerLayout;
 	private EditText mTxtSearch;
 	private MainActivityViewPagerAdapter mAdapter;
-	private FloatingActionButton mBtnNewBuild;
+
 	private Toolbar mToolbar;
 	private NavDrawerFragment mNavDrawerFragment;
 
@@ -67,12 +63,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 		_initMembers();
 
 		setSupportActionBar(mToolbar);
-		//noinspection ConstantConditions
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 		_setupControls();
-
-		//_loadTabs();
 
 		if (savedInstanceState != null) {
 			mSelectedTab = savedInstanceState.getInt("SelectedTab");
@@ -376,8 +369,35 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 		}
 	}
 
-
 	private void _initUserControls() {
+		TextView mBtnNewBuild = findViewById(R.id.btnNewBuild);
+		TextView mBtnStartSimulator = findViewById(R.id.btnStartSimulator);
+		TextView mBtnOnlineLibrary = findViewById(R.id.btnOpenOnlineLibrary);
+
+		mBtnNewBuild.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+			Toast.makeText(v.getContext(), "Create new build order", Toast.LENGTH_SHORT).show();
+			return false;
+			}
+		});
+
+		mBtnStartSimulator.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+			Toast.makeText(v.getContext(), "Open SC2 Simulator", Toast.LENGTH_SHORT).show();
+			return false;
+			}
+		});
+
+		mBtnOnlineLibrary.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+			Toast.makeText(v.getContext(), "Open Online Library", Toast.LENGTH_SHORT).show();
+			return false;
+			}
+		});
+
 		mToolbar = (Toolbar) findViewById(R.id.appBar);
 		mNavDrawerFragment = (NavDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_nav_drawer);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -447,19 +467,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 	private void _initMembers() {
 		mFactionImageProvider = new FactionImageProvider();
 		mPresenter = new MainPresenter(this);
-		mBtnNewBuild =
-				new FloatingActionButton.Builder(this)
-				.withDrawable(getResources().getDrawable(android.R.drawable.ic_input_add))
-				.withButtonColor(Color.DKGRAY)
-				.withGravity(Gravity.BOTTOM | Gravity.CENTER)
-				.withMargins(0, 0, 0, 0)
-				.create();
-
-		ViewGroup.LayoutParams lo = mBtnNewBuild.getLayoutParams();
-		lo.width = 250;
-		lo.height = 250;
-
-		mBtnNewBuild.setLayoutParams(lo);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		mTileView = prefs.getBoolean("TileView", true);
@@ -468,47 +475,27 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 
 	private void _setupControls() {
 		mNavDrawerFragment.setRetainInstance(true);
-		mNavDrawerFragment.setUp(mDrawerLayout, mToolbar, mBtnNewBuild, mPresenter);
-
-		/*
-		mPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				mSelectedTab = position;
-				mTabHost.setSelectedNavigationItem(position);
-			}
-		});
-		*/
-
-		_setNewBuildButton();
+		mNavDrawerFragment.setUp(mDrawerLayout, mToolbar, mPresenter);
 	}
 
-	private void _setNewBuildButton() {
+	public void onNewBuild(View view) {
 		if (mPresenter.getMainFaction() != RaceEnum.NotDefined) {
-			mBtnNewBuild.setOnLongClickListener(new View.OnLongClickListener() {
-				@Override
-				public boolean onLongClick(View v) {
-					Toast.makeText(v.getContext(), "Create new build order", Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			});
-
-			mBtnNewBuild.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					NavigationManager.startBuildMakerActivity(MainActivity.this, "");
-				}
-			});
-			mBtnNewBuild.setFloatingActionButtonColor(Color.DKGRAY);
+			NavigationManager.startBuildMakerActivity(MainActivity.this, "");
 		} else {
-			mBtnNewBuild.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Toast.makeText(v.getContext(), "Please select your faction first.", Toast.LENGTH_SHORT).show();
-				}
-			});
-			mBtnNewBuild.setFloatingActionButtonColor(Color.GRAY);
+			Toast.makeText(view.getContext(), "Please select your faction first.", Toast.LENGTH_SHORT).show();
 		}
+	}
+
+	public void onStartSimulator(View view) {
+		if (mPresenter.getMainFaction() != RaceEnum.NotDefined) {
+			NavigationManager.startSimulatorActivity(MainActivity.this);
+		} else {
+			Toast.makeText(view.getContext(), "Please select your faction first.", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public void onOpenOnlineLibrary(View view) {
+		NavigationManager.startOnlineLibraryActivity(MainActivity.this);
 	}
 
 	private void _changeKeyboardVisibility(boolean visible) {
@@ -544,7 +531,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 		editor.apply();
 
 		mPresenter.setMainFaction(faction);
-		_setNewBuildButton();
 	}
 
 	@Override

@@ -157,6 +157,9 @@ public class BuildOrderEncoder {
 		nameToCode.put("MagFieldAccelerator", "fl");
 		nameToCode.put("ExplosiveShrapnelShells", "fz");
 
+		nameToCode.put("SmartServos", "fx");
+		nameToCode.put("EnhancedMunitions", "fc");
+
 		//Protoss buildings
 		nameToCode.put("Nexus", "ae");
 		nameToCode.put("Pylon", "ar");
@@ -240,6 +243,8 @@ public class BuildOrderEncoder {
 		nameToCode.put("AirWeaponsLevel1", "sn");
 		nameToCode.put("AirWeaponsLevel3", "sm");
 		nameToCode.put("AnionPulseCrystals", "dq");
+		nameToCode.put("ShadowStride", "dw");
+		nameToCode.put("TectonicDestabilizers", "de");
 
 		//Zerg buildings
 		nameToCode.put("Spire", "z");
@@ -319,5 +324,6 @@ public class BuildOrderEncoder {
 		nameToCode.put("EnduringLocusts", "sz");
 		nameToCode.put("FlyingLocusts", "sx");
 		nameToCode.put("MutateVentralSacs", "sc");
+		nameToCode.put("AdaptiveTalons", "sv");
 	}
 }

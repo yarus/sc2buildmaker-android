@@ -55,8 +55,9 @@ public class BuildActionListAdapter extends ArrayAdapter<BuildOrderProcessorItem
             return;
         }
 
+        // Show only those items which already started but not yet finished
         for(BuildOrderProcessorItem item : data) {
-            if (item.getFinishedSecond() > this.selectedItem.getSecondInTimeLine()) {
+            if (item.getFinishedSecond() > this.selectedItem.getSecondInTimeLine() && item.getSecondInTimeLine() <= this.selectedItem.getSecondInTimeLine()) {
                 this.shownValues.add(item);
             }
         }

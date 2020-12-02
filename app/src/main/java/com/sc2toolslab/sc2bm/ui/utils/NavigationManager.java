@@ -14,6 +14,7 @@ import com.sc2toolslab.sc2bm.ui.activities.BuildViewActivity;
 import com.sc2toolslab.sc2bm.ui.activities.MainActivity;
 import com.sc2toolslab.sc2bm.ui.activities.OnlineLibraryActivity;
 import com.sc2toolslab.sc2bm.ui.activities.SettingsActivity;
+import com.sc2toolslab.sc2bm.ui.activities.SimulatorActivity;
 
 public class NavigationManager {
 	private NavigationManager() {
@@ -72,6 +73,11 @@ public class NavigationManager {
 	public static void startOnlineLibraryActivity(Activity from) {
 		Intent i = new Intent(from, OnlineLibraryActivity.class);
 		//i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
+		from.startActivity(i);
+	}
+
+	public static void startSimulatorActivity(Activity from) {
+		Intent i = new Intent(from, SimulatorActivity.class);
 		from.startActivity(i);
 	}
 }

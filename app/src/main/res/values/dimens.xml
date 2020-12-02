@@ -21,4 +21,5 @@
     <dimen name="tile_list_item_spacing">1dp</dimen>
     <dimen name="additemheight">80dp</dimen>
     <dimen name="additemwidth">80dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

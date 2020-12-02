@@ -26,6 +26,10 @@ public class BuildMakerStatsPresenter implements IPresenter {
 
 		BuildItemStatistics stats = item.getStatisticsProvider();
 
+		bindStats(stats);
+	}
+
+	public void bindStats(BuildItemStatistics stats) {
 		mView.setEnergy(stats.getStatValueByName("TotalCasts"));
 		mView.setLarva(stats.getStatValueByName("TotalLarva"));
 		mView.setMinerals(stats.getMinerals());
