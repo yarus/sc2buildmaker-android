@@ -8,10 +8,11 @@
     app:mrl_rippleDelayClick="false"
     app:mrl_rippleHover="true"
     android:gravity="center"
-    app:mrl_rippleOverlay="true">
+    app:mrl_rippleOverlay="true"
+    android:descendantFocusability="blocksDescendants">
 
     <FrameLayout
-        android:id="@+id/FrameLayout1"
+        android:id="@+id/itemFrame"
         android:layout_gravity="center"
         android:layout_width="45dp"
         android:layout_height="match_parent">
@@ -21,6 +22,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@mipmap/bm_timer"/>
+
+        <TextView
+            android:id="@+id/txtItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="7dp"
+            android:textColor="@android:color/white"
+            android:text="x2"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txtTimeLeft"

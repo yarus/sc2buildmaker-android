@@ -30,7 +30,7 @@ public class BuildEditPresenter {
 			initialBuild = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(buildName);
 		}
 
-		BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(initialBuild);
+		BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(initialBuild, true);
 		if (processor != null) {
 			BuildOrderProcessorData currentBuild = processor.getCurrentBuildOrder();
 			if (currentBuild != null && currentBuild.getName().equals(buildName)) {

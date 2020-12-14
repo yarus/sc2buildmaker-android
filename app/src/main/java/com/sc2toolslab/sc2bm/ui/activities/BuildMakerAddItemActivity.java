@@ -2,7 +2,10 @@ package com.sc2toolslab.sc2bm.ui.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -20,12 +23,10 @@ import com.sc2toolslab.sc2bm.R;
 import com.sc2toolslab.sc2bm.constants.AppConstants;
 import com.sc2toolslab.sc2bm.domain.BuildItemEntity;
 import com.sc2toolslab.sc2bm.domain.BuildItemTypeEnum;
-import com.sc2toolslab.sc2bm.engine.domain.BuildItemStatistics;
-import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessor;
 import com.sc2toolslab.sc2bm.ui.adapters.AddBuildItemsListAdapter;
+import com.sc2toolslab.sc2bm.ui.model.AddItemDataItem;
 import com.sc2toolslab.sc2bm.ui.presenters.BuildMakerAddItemPresenter;
 import com.sc2toolslab.sc2bm.ui.providers.BuildItemImageProvider;
-import com.sc2toolslab.sc2bm.ui.providers.BuildProcessorConfigurationProvider;
 import com.sc2toolslab.sc2bm.ui.views.IBuildMakerAddItemView;
 
 import java.util.List;
@@ -41,6 +42,24 @@ public class BuildMakerAddItemActivity extends AppCompatActivity implements IBui
 	private View mItemInfoLayout;
 	private Dialog mItemAddDialog;
 
+	// private boolean mShowOnlyAvailableToProduce;
+
+	/*
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle extras = intent.getExtras();
+			if (extras != null) {
+				BuildItemStatistics stats = (BuildItemStatistics) extras.get("currentStats");
+
+				if (stats != null) {
+					mPresenter.updateByStat(stats);
+				}
+			}
+		}
+	};
+	*/
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,6 +73,8 @@ public class BuildMakerAddItemActivity extends AppCompatActivity implements IBui
 
 		_initControls();
 
+		// mShowOnlyAvailableToProduce = getIntent().getBooleanExtra("ShowOnlyAvailableToProduce", false);
+
 		mPresenter = new BuildMakerAddItemPresenter(this, BuildItemTypeEnum.valueOf(getIntent().getStringExtra(AppConstants.BUILD_ITEM_TYPE_INTENT_FLAG)), getIntent().getIntExtra("SelectedItemPosition", -1));
 	}
 
@@ -62,6 +83,20 @@ public class BuildMakerAddItemActivity extends AppCompatActivity implements IBui
 		super.onPostResume();
 
 		_initControls();
+
+		/*
+		IntentFilter filter = new IntentFilter();
+		filter.addAction("BuildSimulator.BuildChanged");
+
+		this.registerReceiver(this.receiver, filter);
+		*/
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		//this.unregisterReceiver(this.receiver);
 	}
 
 	//region Event Handlers
@@ -95,9 +130,13 @@ public class BuildMakerAddItemActivity extends AppCompatActivity implements IBui
 	}
 
 	@Override
-	public void renderGrid(BuildOrderProcessor processor, List<BuildItemEntity> data, BuildItemStatistics currentStats, BuildItemStatistics lastItemStats) {
-		mAdapter = new AddBuildItemsListAdapter(this, processor, data, currentStats, lastItemStats);
-		mGridView.setAdapter(mAdapter);
+	public void renderGrid(List<AddItemDataItem> data) {
+		if (mAdapter == null) {
+			mAdapter = new AddBuildItemsListAdapter(this, data);
+			mGridView.setAdapter(mAdapter);
+		} else {
+			mAdapter.updateData(data);
+		}
 	}
 
 	@Override

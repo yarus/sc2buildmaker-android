@@ -24,6 +24,7 @@ import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessorItem;
 import com.sc2toolslab.sc2bm.ui.adapters.BuildActionListAdapter;
 import com.sc2toolslab.sc2bm.ui.adapters.BuildItemsListAdapter;
 import com.sc2toolslab.sc2bm.ui.fragments.BuildMakerStatsFragment;
+import com.sc2toolslab.sc2bm.ui.model.QueueDataItem;
 import com.sc2toolslab.sc2bm.ui.presenters.BuildMakerPresenter;
 import com.sc2toolslab.sc2bm.ui.utils.FloatingActionButton;
 import com.sc2toolslab.sc2bm.ui.utils.NavigationManager;
@@ -196,7 +197,8 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 	*/
 
 	public void onUndoActionClick(View v) {
-		mPresenter.undoLastItem();
+		//mPresenter.undoLastItem();
+		mPresenter.undoSelectedItem();
 		_scrollListViewToBottom();
 	}
 
@@ -221,10 +223,10 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 
 				BuildOrderProcessorItem baseItem = baseAdapter.getItem(baseAdapter.getSelectedIndex());
 
-				BuildOrderProcessorItem statItem = statAdapter.getItem(arg2);
+				QueueDataItem statItem = statAdapter.getItem(arg2);
 
 				if (baseItem != null && statItem != null) {
-					Toast.makeText(BuildMakerActivity.this, statItem.getDisplayName() + " will be completed in " + (statItem.getFinishedSecond() - baseItem.getSecondInTimeLine()) + " seconds", Toast.LENGTH_LONG).show();
+					Toast.makeText(BuildMakerActivity.this, statItem.Item.getDisplayName() + " will be completed in " + (statItem.Item.getFinishedSecond() - baseItem.getSecondInTimeLine()) + " seconds", Toast.LENGTH_LONG).show();
 				}
 			}
 		});
@@ -238,10 +240,10 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 
 				BuildOrderProcessorItem baseItem = baseAdapter.getItem(baseAdapter.getSelectedIndex());
 
-				BuildOrderProcessorItem statItem = statAdapter.getItem(arg2);
+				QueueDataItem statItem = statAdapter.getItem(arg2);
 
-				if (baseItem != null && statItem != null && statItem.getItemType() == BuildItemTypeEnum.Unit) {
-					mPresenter.addBuildItem(statItem.getItemName());
+				if (baseItem != null && statItem != null && statItem.Item.getItemType() == BuildItemTypeEnum.Unit) {
+					mPresenter.addBuildItem(statItem.Item.getItemName());
 				}
 
 				return true;
@@ -280,17 +282,17 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 	}
 
 	@Override
-	public void renderList(List<BuildOrderProcessorItem> buildItems) {
+	public void renderList(List<BuildOrderProcessorItem> buildItems, List<QueueDataItem> queue, BuildOrderProcessorItem selectedItem) {
 		if(buildListView.getAdapter() == null) {
 
-			buildListView.setAdapter(new BuildItemsListAdapter(this, new ArrayList<>(buildItems)));
-			actionsQueueListView.setAdapter(new BuildActionListAdapter(this, new ArrayList<>(buildItems), 0));
+			buildListView.setAdapter(new BuildItemsListAdapter(this, buildItems));
+			actionsQueueListView.setAdapter(new BuildActionListAdapter(this, queue, selectedItem));
 		} else {
 			int selectedIndex = mPresenter.getSelectedIndex();
 
-			((BuildItemsListAdapter)buildListView.getAdapter()).updateData(new ArrayList<>(buildItems), selectedIndex);
+			((BuildItemsListAdapter)buildListView.getAdapter()).updateData(buildItems, selectedIndex);
 
-			((BuildActionListAdapter)actionsQueueListView.getAdapter()).updateData(new ArrayList<>(buildItems), selectedIndex);
+			((BuildActionListAdapter)actionsQueueListView.getAdapter()).updateData(queue, selectedItem);
 		}
 	}
 
@@ -302,7 +304,7 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 				int items = buildListView.getAdapter().getCount();
 
 				if (items > 0) {
-					buildListView.setSelection(items - 1);
+					buildListView.setSelection(mPresenter.getSelectedIndex());
 				}
 			}
 		});

@@ -2,23 +2,27 @@ package com.sc2toolslab.sc2bm.ui.presenters;
 
 import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
+import com.sc2toolslab.sc2bm.engine.EngineConsts;
 import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessor;
 import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessorData;
 import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessorItem;
+import com.sc2toolslab.sc2bm.ui.model.QueueDataItem;
 import com.sc2toolslab.sc2bm.ui.providers.BuildOrdersProvider;
 import com.sc2toolslab.sc2bm.ui.providers.BuildProcessorConfigurationProvider;
 import com.sc2toolslab.sc2bm.ui.views.IBuildMakerStatsView;
 import com.sc2toolslab.sc2bm.ui.views.IBuildMakerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BuildMakerPresenter implements IPresenter {
-	private IBuildMakerView mView;
+	private final IBuildMakerView mView;
 	private BuildOrderProcessorData mBuildOrder;
 	private BuildOrderProcessor mBuildProcessor;
 	private BuildMakerStatsPresenter mStatsPresenter;
-	private IBuildMakerStatsView mStatsView;
+	private final IBuildMakerStatsView mStatsView;
 
 	private int mSelectedItemPosition = 0;
 
@@ -38,19 +42,22 @@ public class BuildMakerPresenter implements IPresenter {
 					System.currentTimeMillis(),
 					System.currentTimeMillis(),
 					new ArrayList<String>());
+		} else if (buildName.equals("SYSTEM_SIMULATOR_RESULTS")) {
+			BuildOrderProcessorData loadedBuild = BuildProcessorConfigurationProvider.getInstance().getLoadedBuildOrder();
+			buildEntity = loadedBuild.generateBuildOrderEntity();
 		} else {
 			buildEntity = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(buildName);
 		}
 
-		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity);
+		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, true);
 		mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
 
 		List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
 		this.mSelectedItemPosition = items.size() - 2;
 
-		bindData();
-
 		mStatsPresenter = new BuildMakerStatsPresenter(statsView, this.mBuildOrder);
+
+		bindData();
 	}
 
 	public void bindData() {
@@ -58,17 +65,99 @@ public class BuildMakerPresenter implements IPresenter {
 
 		List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
 
-		mView.renderList(items.subList(1, items.size()));
+		BuildOrderProcessorItem selectedItem = items.get(mSelectedItemPosition + 1);
+
+		mStatsPresenter.bindData(selectedItem);
+
+		List<QueueDataItem> queue = _getQueue(items, items.get(mSelectedItemPosition + 1));
+
+		mView.renderList(items.subList(1, items.size()), queue, items.get(mSelectedItemPosition + 1));
+	}
+
+	private List<QueueDataItem> _getQueue(List<BuildOrderProcessorItem> items, BuildOrderProcessorItem selectedItem) {
+		List<BuildOrderProcessorItem> queue = new ArrayList<>();
+		// Show only those items which already started but not yet finished
+		for(BuildOrderProcessorItem item : items) {
+			if (!item.getItemName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME) && item.getFinishedSecond() > selectedItem.getSecondInTimeLine() && item.getSecondInTimeLine() <= selectedItem.getSecondInTimeLine()) {
+				queue.add(item);
+			}
+		}
+
+		Collections.sort(queue, new Comparator<BuildOrderProcessorItem>() {
+			public int compare(BuildOrderProcessorItem item1, BuildOrderProcessorItem item2) {
+				return item1.getFinishedSecond().compareTo(item2.getFinishedSecond());
+			}
+		});
+
+		List<QueueDataItem> filteredQueue = new ArrayList<>();
+		QueueDataItem previousItem = null;
+		for(BuildOrderProcessorItem item : queue) {
+			if (previousItem != null && (previousItem.Item.getSecondInTimeLine().equals(item.getSecondInTimeLine())) && previousItem.Item.getItemName().equals(item.getItemName())) {
+				previousItem.Count++;
+				continue;
+			}
+
+			QueueDataItem queueItem = new QueueDataItem();
+			queueItem.Count = 1;
+			queueItem.Item = item;
+			filteredQueue.add(queueItem);
+			previousItem = queueItem;
+		}
+
+		return filteredQueue;
 	}
 
 	public void setSelectedIndex(int index) {
 		mSelectedItemPosition = index;
 
+		bindData();
+	}
+
+	public boolean undoSelectedItem() {
 		List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
 
+		if (items.size() == 1) {
+			return true;
+		}
+
 		BuildOrderProcessorItem selectedItem = items.get(mSelectedItemPosition + 1);
-		mStatsPresenter.bindData(selectedItem);
-		mView.renderList(items.subList(1, items.size()));
+
+		BuildOrderEntity newBuild = new BuildOrderEntity(mBuildOrder.getName(),
+				mBuildOrder.getsC2VersionID(),
+				mBuildOrder.getDescription(),
+				mBuildOrder.getRace(),
+				mBuildOrder.getVsRace(),
+				0,
+				mBuildOrder.getCreated(),
+				System.currentTimeMillis(),
+				new ArrayList<String>());
+
+		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(newBuild, true);
+
+		boolean result = true;
+
+		for(BuildOrderProcessorItem item : items) {
+			if (item.getItemName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME) || item == selectedItem) {
+				continue;
+			}
+
+			boolean addResult = mBuildProcessor.addBuildItem(item.getItemName());
+			if (!addResult) {
+				result = false;
+			}
+		}
+
+		mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
+
+		mStatsPresenter = new BuildMakerStatsPresenter(mStatsView, this.mBuildOrder);
+
+		if (mSelectedItemPosition > (mBuildOrder.getBuildItems().size() - 2)) {
+			mSelectedItemPosition = mBuildOrder.getBuildItems().size() - 2;
+		}
+
+		bindData();
+
+		return result;
 	}
 
 	public void undoLastItem() {
@@ -92,7 +181,7 @@ public class BuildMakerPresenter implements IPresenter {
 
 	public void updateBuildName(String newBuildName) {
 		BuildOrderEntity buildEntity = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(newBuildName);
-		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity);
+		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, false);
 		mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
 
 		List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
@@ -104,10 +193,58 @@ public class BuildMakerPresenter implements IPresenter {
 	}
 
 	public boolean addBuildItem(String itemName) {
-		boolean result = mBuildProcessor.addBuildItem(itemName);
-		if (result) {
-			setSelectedIndex(mBuildOrder.getBuildOrderItemsClone().size() - 2);
+		boolean result = true;
+
+		if (mSelectedItemPosition == mBuildOrder.getBuildOrderItemsClone().size() - 2) {
+			result = mBuildProcessor.addBuildItem(itemName);
+			if (result) {
+				setSelectedIndex(mBuildOrder.getBuildOrderItemsClone().size() - 2);
+			}
+		} else {
+			// Add item in the middle
+			List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
+
+			BuildOrderProcessorItem selectedItem = items.get(mSelectedItemPosition + 1);
+
+			BuildOrderEntity newBuild = new BuildOrderEntity(mBuildOrder.getName(),
+					mBuildOrder.getsC2VersionID(),
+					mBuildOrder.getDescription(),
+					mBuildOrder.getRace(),
+					mBuildOrder.getVsRace(),
+					0,
+					mBuildOrder.getCreated(),
+					System.currentTimeMillis(),
+					new ArrayList<String>());
+
+			mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(newBuild, true);
+
+			result = true;
+
+			for(BuildOrderProcessorItem item : items) {
+				if (item.getItemName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME)) {
+					continue;
+				}
+
+				mBuildProcessor.addBuildItem(item.getItemName());
+
+				if (item == selectedItem) {
+					boolean addNewResult = mBuildProcessor.addBuildItem(itemName);
+					if (!addNewResult) {
+						result = false;
+						break;
+					}
+				}
+			}
+
+			mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
+
+			mStatsPresenter = new BuildMakerStatsPresenter(mStatsView, this.mBuildOrder);
+
+			mSelectedItemPosition++;
 		}
+
+		bindData();
+
 		return result;
 	}
 

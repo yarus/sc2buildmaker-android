@@ -100,7 +100,7 @@ public class OnlineLibraryPresenter implements IPresenter {
 			BuildOrderEntity build = builds.get(i);
 
 			if (BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(build.getName()) == null) {
-				BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(build);
+				BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(build, true);
 				BuildOrderProcessorData boData = processor.getCurrentBuildOrder();
 
 				build.setBuildLengthInSeconds(boData.getBuildLengthInSeconds());

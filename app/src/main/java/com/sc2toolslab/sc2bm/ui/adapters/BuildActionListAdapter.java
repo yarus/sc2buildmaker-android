@@ -1,76 +1,55 @@
 package com.sc2toolslab.sc2bm.ui.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sc2toolslab.sc2bm.R;
 import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessorItem;
 import com.sc2toolslab.sc2bm.ui.model.BuildActionHolder;
+import com.sc2toolslab.sc2bm.ui.model.QueueDataItem;
 import com.sc2toolslab.sc2bm.ui.providers.BuildItemImageProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class BuildActionListAdapter extends ArrayAdapter<BuildOrderProcessorItem> {
-    private BuildItemImageProvider mImageProvider;
+public class BuildActionListAdapter extends ArrayAdapter<QueueDataItem> {
+    private final BuildItemImageProvider mImageProvider;
 
     private final Context context;
-    private List<BuildOrderProcessorItem> values;
-    private List<BuildOrderProcessorItem> shownValues;
-    private int selectedIndex;
+    private List<QueueDataItem> shownValues;
+    // private int selectedIndex;
     private BuildOrderProcessorItem selectedItem;
 
-    public BuildActionListAdapter(Context context, List<BuildOrderProcessorItem> data, int selectedIndex) {
+    public BuildActionListAdapter(Context context, List<QueueDataItem> data, BuildOrderProcessorItem selectedItem) {
         super(context, R.layout.fragment_build_maker_action_item, data);
 
         this.context = context;
-        this.values = data;
         this.shownValues = new ArrayList<>();
-        this.selectedIndex = selectedIndex;
+        this.selectedItem = selectedItem;
 
         mImageProvider = new BuildItemImageProvider();
     }
 
-    public void updateData(List<BuildOrderProcessorItem> data, int selectedIndex) {
-        this.values = new ArrayList<>(data);
+    public void updateData(List<QueueDataItem> data, BuildOrderProcessorItem selectedItem) {
+        this.selectedItem = selectedItem;
 
-        this.selectedIndex = selectedIndex;
-
-        if (this.values.size() > 0 && this.values.size() > selectedIndex) {
-            this.selectedItem = data.get(selectedIndex);
-        }
-
-        this.shownValues = new ArrayList<>();
+        List<BuildOrderProcessorItem> results = new ArrayList<>();
 
         if (this.selectedItem == null) {
             return;
         }
 
-        // Show only those items which already started but not yet finished
-        for(BuildOrderProcessorItem item : data) {
-            if (item.getFinishedSecond() > this.selectedItem.getSecondInTimeLine() && item.getSecondInTimeLine() <= this.selectedItem.getSecondInTimeLine()) {
-                this.shownValues.add(item);
-            }
-        }
-
-        Collections.sort(this.shownValues, new Comparator<BuildOrderProcessorItem>() {
-            public int compare(BuildOrderProcessorItem item1, BuildOrderProcessorItem item2) {
-                return item1.getFinishedSecond().compareTo(item2.getFinishedSecond());
-            }
-        });
+        this.shownValues = data;
 
         this.clear();
 
-        for(BuildOrderProcessorItem item : this.shownValues) {
+        for(QueueDataItem item : this.shownValues) {
             this.add(item);
         }
 
@@ -88,6 +67,8 @@ public class BuildActionListAdapter extends ArrayAdapter<BuildOrderProcessorItem
             BuildActionHolder holder = new BuildActionHolder();
             holder.txtTimeLeft = (TextView) rowView.findViewById(R.id.txtTimeLeft);
             holder.imgIcon = (ImageView) rowView.findViewById(R.id.imgItem);
+            holder.itemFrame = (FrameLayout) rowView.findViewById(R.id.itemFrame);
+            holder.txtItemCount = (TextView) rowView.findViewById(R.id.txtItemCount);
 
             rowView.setTag(holder);
         }
@@ -96,21 +77,28 @@ public class BuildActionListAdapter extends ArrayAdapter<BuildOrderProcessorItem
             return rowView;
         }
 
-        BuildOrderProcessorItem entry = this.shownValues.get(position);
+        QueueDataItem entry = this.shownValues.get(position);
 
         if (entry != null) {
             BuildActionHolder holder = (BuildActionHolder) rowView.getTag();
 
-            Integer imageId = mImageProvider.getImageResourceIdByKey(entry.getItemName());
+            holder.itemFrame.setVisibility(View.VISIBLE);
+
+            Integer imageId = mImageProvider.getImageResourceIdByKey(entry.Item.getItemName());
             if (imageId != null) {
                 holder.imgIcon.setImageResource(imageId);
             } else {
                 holder.imgIcon.setImageResource(R.drawable.empty_cell);
             }
 
-            BuildOrderProcessorItem selectedItem = this.values.get(this.selectedIndex);
+            if (entry.Count > 1) {
+                holder.txtItemCount.setText(String.format("x%d", entry.Count));
+                holder.txtItemCount.setVisibility(View.VISIBLE);
+            } else {
+                holder.txtItemCount.setVisibility(View.INVISIBLE);
+            }
 
-            holder.txtTimeLeft.setText("~" + (entry.getFinishedSecond() - selectedItem.getSecondInTimeLine()) + " s");
+            holder.txtTimeLeft.setText("~" + (entry.Item.getFinishedSecond() - selectedItem.getSecondInTimeLine()) + "s");
         }
 
         return rowView;

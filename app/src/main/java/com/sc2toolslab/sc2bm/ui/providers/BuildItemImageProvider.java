@@ -316,5 +316,6 @@ public class BuildItemImageProvider extends BaseImageProvider<String> {
 		nameToImageId.put("FlyingLocusts", R.drawable.bi_flyinglocusts);
 		nameToImageId.put("MutateVentralSacs", R.drawable.bi_morphventralsacs);
 		nameToImageId.put("AdaptiveTalons", R.drawable.bi_adaptivetalons);
+		nameToImageId.put("SeismicSpines", R.drawable.bi_seismic_spines);
 	}
 }

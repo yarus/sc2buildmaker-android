@@ -22,14 +22,14 @@ public class BuildMakerStatsPresenter implements IPresenter {
 	}
 
 	public void bindData(BuildOrderProcessorItem item) {
-		mView.setTime(item.getSecondInTimeLine());
-
 		BuildItemStatistics stats = item.getStatisticsProvider();
 
-		bindStats(stats);
+		bindStats(item.getSecondInTimeLine(), stats);
 	}
 
-	public void bindStats(BuildItemStatistics stats) {
+	public void bindStats(Integer seconds, BuildItemStatistics stats) {
+		mView.setTime(seconds);
+
 		mView.setEnergy(stats.getStatValueByName("TotalCasts"));
 		mView.setLarva(stats.getStatValueByName("TotalLarva"));
 		mView.setMinerals(stats.getMinerals());

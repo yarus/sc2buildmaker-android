@@ -85,5 +85,9 @@ public class BuildOrderProcessorItem {
 		return displayName;
 	}
 
+	public void setDisplayName(String name) {
+		this.displayName = name;
+	}
+
 	public BuildItemTypeEnum getItemType() { return this.itemType; }
 }

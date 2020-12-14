@@ -41,13 +41,22 @@
                 android:value=".ui.activities.MainActivity" />
         </activity>
         <activity
-            android:name=".ui.activities.SimulatorActivity"
+            android:name=".ui.activities.SimulatorActivity2"
             android:label="@string/title_activity_simulator"
             android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".ui.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.activities.SimulatorResultsActivity"
+            android:label="@string/title_activity_simulator_results"
+            android:configChanges="keyboardHidden|orientation"
+            android:parentActivityName=".ui.activities.SimulatorActivity2">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.SimulatorActivity2" />
         </activity>
         <activity
             android:name=".ui.activities.BuildViewActivity"

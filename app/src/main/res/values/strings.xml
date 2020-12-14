@@ -36,4 +36,5 @@
     <string name="unable_to_add_item_message">There is no appropriate point in timeline when it is possible to build this item</string>
     <string name="action_show_workers">Show workers</string>
     <string name="title_activity_simulator">SC2 Simulator</string>
+    <string name="title_activity_simulator_results">SC2 Simulation Results</string>
 </resources>
