@@ -116,6 +116,10 @@ public class BuildMakerAddItemActivity extends AppCompatActivity implements IBui
 		}
 	}
 
+	public void onCancelClick(View v) {
+		finish();
+	}
+
 	//endregion
 
 	//region IBuildMakerAddItemView implementation
