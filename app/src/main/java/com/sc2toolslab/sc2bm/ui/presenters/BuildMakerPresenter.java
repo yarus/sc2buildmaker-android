@@ -1,5 +1,7 @@
 package com.sc2toolslab.sc2bm.ui.presenters;
 
+import com.sc2toolslab.sc2bm.domain.BuildItemEntity;
+import com.sc2toolslab.sc2bm.domain.BuildItemTypeEnum;
 import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
 import com.sc2toolslab.sc2bm.engine.EngineConsts;
@@ -13,6 +15,7 @@ import com.sc2toolslab.sc2bm.ui.views.IBuildMakerStatsView;
 import com.sc2toolslab.sc2bm.ui.views.IBuildMakerView;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +26,7 @@ public class BuildMakerPresenter implements IPresenter {
 	private BuildOrderProcessor mBuildProcessor;
 	private BuildMakerStatsPresenter mStatsPresenter;
 	private final IBuildMakerStatsView mStatsView;
+	private final Collection<BuildItemEntity> mAllItems;
 
 	private int mSelectedItemPosition = 0;
 
@@ -49,8 +53,16 @@ public class BuildMakerPresenter implements IPresenter {
 			buildEntity = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(buildName);
 		}
 
-		mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, true);
+		try {
+			mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, true);
+		}
+		catch(Exception e) {
+			this.mView.showMessage(e.getMessage());
+		}
+
 		mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
+
+		mAllItems = BuildProcessorConfigurationProvider.getInstance().getLastItemsDictionary().clone().values();
 
 		List<BuildOrderProcessorItem> items = mBuildOrder.getBuildOrderItemsClone();
 		this.mSelectedItemPosition = items.size() - 2;
@@ -92,7 +104,7 @@ public class BuildMakerPresenter implements IPresenter {
 		List<QueueDataItem> filteredQueue = new ArrayList<>();
 		QueueDataItem previousItem = null;
 		for(BuildOrderProcessorItem item : queue) {
-			if (previousItem != null && (previousItem.Item.getSecondInTimeLine().equals(item.getSecondInTimeLine())) && previousItem.Item.getItemName().equals(item.getItemName())) {
+			if (previousItem != null && (previousItem.Item.getSecondInTimeLine().equals(item.getSecondInTimeLine())) && previousItem.Item.getItemName().equals(item.getItemName()) && previousItem.Item.getFinishedSecond().equals(item.getFinishedSecond())) {
 				previousItem.Count++;
 				continue;
 			}
@@ -100,11 +112,28 @@ public class BuildMakerPresenter implements IPresenter {
 			QueueDataItem queueItem = new QueueDataItem();
 			queueItem.Count = 1;
 			queueItem.Item = item;
+
+			if (mBuildOrder.getRace() == RaceEnum.Protoss && (item.getItemType() == BuildItemTypeEnum.Upgrade || item.getItemType() == BuildItemTypeEnum.Unit)) {
+				BuildItemEntity itemEntity = _getItemByName(item.getItemName());
+				queueItem.IsBoosted = (item.getFinishedSecond() - itemEntity.getBuildTimeInSeconds()) < item.getSecondInTimeLine();
+			}
+
 			filteredQueue.add(queueItem);
 			previousItem = queueItem;
 		}
 
 		return filteredQueue;
+	}
+
+	private BuildItemEntity _getItemByName(String name) {
+		BuildItemEntity entity = null;
+		for (BuildItemEntity item : mAllItems) {
+			if (item.getName().equals(name)) {
+				entity = item;
+			}
+		}
+
+		return entity;
 	}
 
 	public void setSelectedIndex(int index) {

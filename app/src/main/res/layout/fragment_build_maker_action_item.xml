@@ -34,6 +34,13 @@
             android:textSize="12sp"
             android:textStyle="bold"/>
 
+        <ImageView
+            android:id="@+id/imgBoosted"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="start|top"
+            android:src="@drawable/bi_chronoboost"/>
+
         <TextView
             android:id="@+id/txtTimeLeft"
             android:layout_width="wrap_content"

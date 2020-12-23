@@ -94,10 +94,14 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 		int id = item.getItemId();
 
 		if (id == R.id.action_build_save) {
-			//save build in temporary file
-
 			//navigate to build edit
 			NavigationManager.startBuildEditActivity(this, mPresenter.getBuildName());
+
+			return true;
+		}
+
+		if (id == R.id.action_build_results) {
+			NavigationManager.startSimulatorResultsActivity(BuildMakerActivity.this, "");
 
 			return true;
 		}
@@ -195,6 +199,10 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 		});
 	}
 	*/
+
+	public void showMessage(String message) {
+		Toast.makeText(this.getContext(), message, Toast.LENGTH_SHORT).show();
+	}
 
 	public void onUndoActionClick(View v) {
 		//mPresenter.undoLastItem();

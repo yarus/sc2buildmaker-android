@@ -1,11 +1,12 @@
 package com.sc2toolslab.sc2bm.ui.views;
 
-import com.sc2toolslab.sc2bm.domain.BuildItemEntity;
-import com.sc2toolslab.sc2bm.engine.domain.BuildItemStatistics;
+import android.content.Context;
 
-import java.util.List;
+import com.sc2toolslab.sc2bm.engine.domain.BuildItemStatistics;
+import com.sc2toolslab.sc2bm.ui.model.SimulationResultsData;
 
 public interface ISimulatorResultsView {
-    void render(List<BuildItemEntity> buildItems, BuildItemStatistics currentStats);
+    void render(SimulationResultsData data, BuildItemStatistics lastItemStats);
     void showMessage(String message);
+    Context getContext();
 }

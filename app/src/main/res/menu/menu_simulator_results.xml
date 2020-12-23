@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_build_save"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="Save Build Order"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
         android:id="@+id/action_build_settings"
-        android:icon="@mipmap/ic_settings"
+        android:icon="@mipmap/ic_edit_build"
         android:title="Review Build Order"
         app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

@@ -3,12 +3,6 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".ui.MainActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
@@ -69,12 +63,6 @@
         android:id="@+id/action_default_show"
         android:icon="@android:drawable/ic_menu_view"
         android:title="Show Default"
-        app:showAsAction="ifRoom|collapseActionView"/>
-
-    <item
-        android:id="@+id/action_online"
-        android:icon="@android:drawable/stat_notify_sync"
-        android:title="Online Library"
         app:showAsAction="ifRoom|collapseActionView"/>
 
 </menu>

@@ -9,8 +9,8 @@ android {
         //applicationId "com.sc2toolslab.sc2bmfree"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 75
-        versionName "5.0.3"
+        versionCode 79
+        versionName "5.0.5"
         archivesBaseName = "sc2buildmaker-" + versionCode
         //archivesBaseName = "sc2buildmaker-" + versionCode + "-free"
         multiDexEnabled true

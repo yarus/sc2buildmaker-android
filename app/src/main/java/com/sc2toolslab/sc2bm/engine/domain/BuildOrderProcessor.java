@@ -84,11 +84,14 @@ public class BuildOrderProcessor {
 
 		BuildItemEntity[] referenceToBuildItem = {buildItem};
 		BuildItemStatistics[] referenceToStatProvider = {statProvider};
+
 		try {
 			getCurrentStateData(buildItemName, /*out*/ referenceToBuildItem, /*out*/ referenceToStatProvider);
 		} catch (ArgumentException e) {
 			e.printStackTrace();
+			return false;
 		}
+
 		buildItem = referenceToBuildItem[0];
 		statProvider = referenceToStatProvider[0];
 
@@ -106,6 +109,11 @@ public class BuildOrderProcessor {
 		int secondInTimeLine = this.mBuildOrder.getLastBuildItem() != null
 				? this.mBuildOrder.getLastBuildItem().getSecondInTimeLine()
 				: 0;
+
+		// Only Default Item should be added at second 0
+		if (secondInTimeLine == 0 && !buildItem.getName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME)) {
+			secondInTimeLine = 1;
+		}
 
 		BuildOrderProcessorItem buildOrderItem = createBuildOrderItemWithAdjustedResourcesAndStatistics(
 				secondInTimeLine + secondsToAppropriateItem,
@@ -184,8 +192,7 @@ public class BuildOrderProcessor {
 
 	private void findAppropriateSecondInTimeLine(BuildItemEntity buildItem, /*ref*/ BuildItemStatistics[] stats, /*out*/ int[] secondsToAppropriateItem) throws ArgumentException {
 		secondsToAppropriateItem[0] = 0;
-		while ((!this.isCurrentSecondHasEnoughResourcesToBuildItem(buildItem, stats[0])
-				|| !this.hasFreeProductionBuilding(stats[0], buildItem) || !this.isRequirementsSatisfied(buildItem, stats[0]))
+		while ((!this.isCurrentSecondHasEnoughResourcesToBuildItem(buildItem, stats[0]) || !this.hasFreeProductionBuilding(stats[0], buildItem) || !this.isRequirementsSatisfied(buildItem, stats[0]))
 				&& secondsToAppropriateItem[0] < this.mConfig.getGlobalConstants().getMaximumPeriodInSecondsForBuildPrediction()) {
 			secondsToAppropriateItem[0]++;
 

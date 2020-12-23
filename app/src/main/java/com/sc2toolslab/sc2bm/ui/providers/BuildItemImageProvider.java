@@ -203,6 +203,7 @@ public class BuildItemImageProvider extends BaseImageProvider<String> {
 		nameToImageId.put("ReturnProbe", R.drawable.bi_scout_in_protoss);
 		nameToImageId.put("GasProbe", R.drawable.bi_gasprobe);
 		nameToImageId.put("StartIdle", R.drawable.bi_startidle);
+		nameToImageId.put("StopIdleIn1Second", R.drawable.bi_stopidle1);
 		nameToImageId.put("StopIdleIn3Seconds", R.drawable.bi_stopidle3);
 		nameToImageId.put("StopIdleIn5Seconds", R.drawable.bi_stopidle5);
 		nameToImageId.put("StopIdleIn10Seconds", R.drawable.bi_stopidle10);
@@ -236,6 +237,7 @@ public class BuildItemImageProvider extends BaseImageProvider<String> {
 		nameToImageId.put("AnionPulseCrystals", R.drawable.bi_anionpulsecrystals);
 		nameToImageId.put("ShadowStride", R.drawable.bi_shadowstride);
 		nameToImageId.put("TectonicDestabilizers", R.drawable.bi_tectonicdestabilizers);
+		nameToImageId.put("FluxVanes", R.drawable.bi_fluxvanes);
 
 		//Zerg buildings
 		nameToImageId.put("Spire", R.drawable.bi_spire);
@@ -317,5 +319,6 @@ public class BuildItemImageProvider extends BaseImageProvider<String> {
 		nameToImageId.put("MutateVentralSacs", R.drawable.bi_morphventralsacs);
 		nameToImageId.put("AdaptiveTalons", R.drawable.bi_adaptivetalons);
 		nameToImageId.put("SeismicSpines", R.drawable.bi_seismic_spines);
+		nameToImageId.put("AnabolicSynthesis", R.drawable.bi_anabolic_synthesis);
 	}
 }

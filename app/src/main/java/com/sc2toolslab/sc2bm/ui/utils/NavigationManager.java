@@ -79,14 +79,15 @@ public class NavigationManager {
 		from.startActivity(i);
 	}
 
-	public static void startSimulatorActivity(Activity from) {
+	public static void startSimulatorActivity(Activity from, String buildName) {
 		Intent i = new Intent(from, SimulatorActivity2.class);
+		i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
 		from.startActivity(i);
 	}
 
-	public static void startSimulatorResultsActivity(Activity from, BuildItemStatistics lastItemStats) {
+	public static void startSimulatorResultsActivity(Activity from, String buildName) {
 		Intent i = new Intent(from, SimulatorResultsActivity.class);
-		i.putExtra("LastItemStatistics", lastItemStats);
+		i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
 		from.startActivity(i);
 	}
 }

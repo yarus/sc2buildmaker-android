@@ -202,11 +202,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 		// as you specify a parent activity in AndroidManifest.searchable.
 		int id = item.getItemId();
 
-		if (id == R.id.action_settings) {
-			showAppSettings();
-			return true;
-		}
-
 		if (id == R.id.action_faction_protoss) {
 			_saveFactionPreference(RaceEnum.Protoss);
 			return true;
@@ -295,13 +290,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 
 			mPager.setCurrentItem(mSelectedTab);
 			mTabHost.getTabAt(mSelectedTab).select();
-
-			return true;
-		}
-
-		if (id == R.id.action_online) {
-			updateActionBar();
-			NavigationManager.startOnlineLibraryActivity(MainActivity.this);
 
 			return true;
 		}
@@ -488,7 +476,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Search
 
 	public void onStartSimulator(View view) {
 		if (mPresenter.getMainFaction() != RaceEnum.NotDefined) {
-			NavigationManager.startSimulatorActivity(MainActivity.this);
+			NavigationManager.startSimulatorActivity(MainActivity.this, "SYSTEM_SIMULATOR_RESULTS");
 		} else {
 			Toast.makeText(view.getContext(), "Please select your faction first.", Toast.LENGTH_SHORT).show();
 		}

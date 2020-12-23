@@ -115,6 +115,7 @@ public class BuildMakerAddItemPresenter {
 			newItem.IsProduceAvailable = isProduceSatisfied;
 			newItem.Item = item;
 			newItem.NeededSeconds = needSeconds;
+			newItem.Count = stats.getStatValueByName(item.getName());
 
 			results.add(newItem);
 		}

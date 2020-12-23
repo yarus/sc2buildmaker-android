@@ -1,0 +1,1 @@
+{"BuildLengthInSeconds":95,"BuildOrderItems":["DefaultItem","Probe","Probe","Pylon","Probe","Gateway","Probe","Chronoboost","Probe","Assimilator","Probe","Probe","GasProbe","GasProbe","Probe","Nexus","CyberneticsCore","Probe","GasProbe"],"CreationDate":1559758190430,"Name":"Gate Double Nexus","Race":"Protoss","SC2VersionID":"5.0.3","VisitedDate":1608217794397,"VsRace":"Terran"}

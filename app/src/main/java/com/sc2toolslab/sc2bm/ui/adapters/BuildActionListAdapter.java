@@ -1,6 +1,7 @@
 package com.sc2toolslab.sc2bm.ui.adapters;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ public class BuildActionListAdapter extends ArrayAdapter<QueueDataItem> {
             holder.imgIcon = (ImageView) rowView.findViewById(R.id.imgItem);
             holder.itemFrame = (FrameLayout) rowView.findViewById(R.id.itemFrame);
             holder.txtItemCount = (TextView) rowView.findViewById(R.id.txtItemCount);
+            holder.imgBoosted = (ImageView) rowView.findViewById(R.id.imgBoosted);
 
             rowView.setTag(holder);
         }
@@ -96,6 +98,12 @@ public class BuildActionListAdapter extends ArrayAdapter<QueueDataItem> {
                 holder.txtItemCount.setVisibility(View.VISIBLE);
             } else {
                 holder.txtItemCount.setVisibility(View.INVISIBLE);
+            }
+
+            if (entry.IsBoosted) {
+                holder.imgBoosted.setVisibility(View.VISIBLE);
+            } else {
+                holder.imgBoosted.setVisibility(View.INVISIBLE);
             }
 
             holder.txtTimeLeft.setText("~" + (entry.Item.getFinishedSecond() - selectedItem.getSecondInTimeLine()) + "s");

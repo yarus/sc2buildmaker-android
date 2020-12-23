@@ -23,6 +23,8 @@ import com.sc2toolslab.sc2bm.ui.views.ISimulatorView2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
 
@@ -55,6 +57,10 @@ public class SimulatorPresenter2 {
         this.mCurrentMode = SimulatorModeEnum.BASE;
 
         _initBuildOrder();
+
+        if (mBuildOrder.getRace() == RaceEnum.Zerg) {
+            this.mCurrentMode = SimulatorModeEnum.MORPH;
+        }
 
         mAllItems = BuildProcessorConfigurationProvider.getInstance().getLastItemsDictionary().clone().values();
 
@@ -236,7 +242,6 @@ public class SimulatorPresenter2 {
         }
     }
 
-
     private BuildItemEntity _getItemByName(String name) {
         BuildItemEntity entity = null;
         for (BuildItemEntity item : mAllItems) {
@@ -282,10 +287,12 @@ public class SimulatorPresenter2 {
             }
 
             if (((name.equals("CommandCenter") || name.equals("OrbitalCommand") || name.equals("PlanetaryFortrees")) && (item.getName().equals("CallMule") || item.getName().equals("CallSupplyDrop") || item.getName().equals("ScannerSweep")))
+                    || (name.equals("Nexus") && (item.getName().equals("Chronoboost") || item.getName().equals("MassRecall")))
                     || (name.equals("Queen") && (item.getName().equals("InjectLarva") || item.getName().equals("SpawnCreepTumor")))) {
                 // Check if Mule is avaialable and CommandCenter is not yet added
-                int castsCount = mBuildOrder.getLastBuildItem().getStatisticsProvider().getStatValueByName("TotalCasts");
-                SimulatorDataItem dataItem = _generateDataItem(item, castsCount > 0, castsCount > 0, 1);
+                boolean satisfied = _isRequirementsSatisfied(item);
+                // int castsCount = mBuildOrder.getLastBuildItem().getStatisticsProvider().getStatValueByName("TotalCasts");
+                SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
                 secondaryResults.add(dataItem);
             }
 
@@ -297,7 +304,8 @@ public class SimulatorPresenter2 {
             }
 
             if (item.getProductionBuildingName() != null
-                    && ((name.equals("Hatchery") && !item.getName().equals("Hive")) || (name.equals("Lair") && !item.getName().equals("Lair")) || (name.equals("Hive") && !item.getName().equals("Hive")))
+                    && ((name.equals("Hatchery") && !item.getName().equals("Hive"))
+                        || (name.equals("Lair") && !item.getName().equals("Lair")) || (name.equals("Hive") && !item.getName().equals("Hive")))
                     && ((item.getProductionBuildingName().equals("FreeHatcheryForUpgrades"))
                         || (item.getProductionBuildingName().equals("Hatchery"))
                         || (item.getProductionBuildingName().equals("FreeHatcheryForLair"))
@@ -309,7 +317,7 @@ public class SimulatorPresenter2 {
                 continue;
             }
 
-            if (name.equals("Gateway") && ((item.getProductionBuildingName() != null && item.getProductionBuildingName().equals("FreeGatewayForUnit")) || item.getName().equals("SwitchToWarpgate"))) {
+            if (name.equals("Gateway") && ((item.getProductionBuildingName() != null && item.getProductionBuildingName().equals("Gateway")) || item.getName().equals("SwitchToWarpgate"))) {
                 boolean satisfied = _isRequirementsSatisfied(item);
                 SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
                 if (item.getName().equals("SwitchToWarpgate")) {
@@ -321,10 +329,16 @@ public class SimulatorPresenter2 {
                 continue;
             }
 
-            if (name.equals("SwitchToWarpgate") && ((item.getProductionBuildingName() != null && item.getProductionBuildingName().equals("FreeWarpgateForUnit")))) {
+            if (name.equals("SwitchToWarpgate") && ((item.getProductionBuildingName() != null && item.getProductionBuildingName().equals("Warpgate")))) {
                 boolean satisfied = _isRequirementsSatisfied(item);
                 SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
-                results.add(dataItem);
+
+                if (item.getName().equals("SwitchToGateway")) {
+                    secondaryResults.add(dataItem);
+                } else {
+                    results.add((dataItem));
+                }
+
                 continue;
             }
 
@@ -350,19 +364,83 @@ public class SimulatorPresenter2 {
                 }
             }
 
-            if (item.getName().contains("OnReactor")) {
+            if (item.getProductionBuildingName() != null && item.getProductionBuildingName().equals(name) && (item.getName().contains("ReactorOn") || item.getName().contains("TechLabOn"))) {
+                int addonNameLength = 9;
                 String itemName = item.getName();
-                String baseItemName = itemName.substring(0, itemName.length() - "OnReactor".length());
+                String baseItemName = itemName.substring(addonNameLength);
+
+                BuildItemEntity baseItem = _getItemByName(baseItemName);
+
+                if (baseItem != null) {
+                    boolean satisfied = _isRequirementsSatisfied(item);
+                    if (satisfied) {
+                        SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                        secondaryResults.add(dataItem);
+                    }
+                }
+
+                continue;
+            }
+
+            // For *OnReactor units
+            if (item.getName().contains("OnReactor") && !item.getName().contains("Land")) {
+                int addonNameLength = 9;
+                String itemName = item.getName();
+                String baseItemName = itemName.substring(0, itemName.length() - addonNameLength);
 
                 BuildItemEntity baseItem = _getItemByName(baseItemName);
 
                 if (baseItem != null && baseItem.getProductionBuildingName() != null && baseItem.getProductionBuildingName().equals(name)) {
                     boolean satisfied = _isRequirementsSatisfied(item);
-                    SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
-                    results.add(dataItem);
+                    if (satisfied) {
+                        SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                        results.add(dataItem);
+                    }
                 }
 
                 continue;
+            }
+
+            // LiftRaxFromReactor, LiftFactoryFromReactor, LiftStarportFromReactor
+            if (item.getName().contains("FromReactor") || item.getName().contains("FromTechLab")) {
+                String itemName = item.getName();
+                int fromAddonStringLength = 11;
+                String baseItemName = itemName.substring(4, itemName.length() - fromAddonStringLength);
+
+                // Why did I used Rax instead of Barracks...
+                if (baseItemName.equals("Rax")) {
+                    baseItemName = "Barracks";
+                }
+
+                if (name.equals(baseItemName)) {
+                    boolean satisfied = _isRequirementsSatisfied(item);
+                    if (satisfied) {
+                        SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                        secondaryResults.add(dataItem);
+                        continue;
+                    }
+                }
+            }
+
+            // LandFactoryOnReactor
+            if (item.getName().contains("Land") && (item.getName().contains("OnReactor") || item.getName().contains("OnTechLab"))) {
+                String itemName = item.getName();
+                int fromAddonStringLength = 9;
+                String baseItemName = itemName.substring(4, itemName.length() - fromAddonStringLength);
+
+                if (baseItemName.equals("Rax")) {
+                    baseItemName = "Barracks";
+                }
+
+                if (name.equals(baseItemName)) {
+                    boolean satisfied = _isRequirementsSatisfied(item);
+
+                    if (satisfied) {
+                        SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                        secondaryResults.add(dataItem);
+                        continue;
+                    }
+                }
             }
 
             if (item.getProductionBuildingName() == null || item.getItemType() == BuildItemTypeEnum.Special || !item.getProductionBuildingName().equals(name)) {
@@ -396,18 +474,23 @@ public class SimulatorPresenter2 {
 
         // Show only those items which already started but not yet finished
         for(BuildOrderProcessorItem item : items) {
-            BuildItemTypeEnum type = item.getItemType();
             int finishedSecond = item.getFinishedSecond();
             int secondInTimeLine = item.getSecondInTimeLine();
-            if (!item.getItemName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME) && finishedSecond > mCurrentSecond && secondInTimeLine <= mCurrentSecond) {
+            if (!item.getItemName().contains("Idle") && !item.getItemName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME) && finishedSecond > mCurrentSecond && secondInTimeLine <= mCurrentSecond) {
                 queue.add(item);
             }
         }
 
+        Collections.sort(queue, new Comparator<BuildOrderProcessorItem>() {
+            public int compare(BuildOrderProcessorItem item1, BuildOrderProcessorItem item2) {
+            return item1.getFinishedSecond().compareTo(item2.getFinishedSecond());
+            }
+        });
+
         List<QueueDataItem> filteredQueue = new ArrayList<>();
         QueueDataItem previousItem = null;
         for(BuildOrderProcessorItem item : queue) {
-            if (previousItem != null && (previousItem.Item.getSecondInTimeLine().equals(item.getSecondInTimeLine())) && previousItem.Item.getItemName().equals(item.getItemName())) {
+            if (previousItem != null && (previousItem.Item.getSecondInTimeLine().equals(item.getSecondInTimeLine())) && previousItem.Item.getItemName().equals(item.getItemName()) && previousItem.Item.getFinishedSecond().equals(item.getFinishedSecond())) {
                 previousItem.Count++;
                 continue;
             }
@@ -415,6 +498,12 @@ public class SimulatorPresenter2 {
             QueueDataItem queueItem = new QueueDataItem();
             queueItem.Count = 1;
             queueItem.Item = item;
+
+            if (mBuildOrder.getRace() == RaceEnum.Protoss && (item.getItemType() == BuildItemTypeEnum.Upgrade || item.getItemType() == BuildItemTypeEnum.Unit)) {
+                BuildItemEntity itemEntity = _getItemByName(item.getItemName());
+                queueItem.IsBoosted = (item.getFinishedSecond() - itemEntity.getBuildTimeInSeconds()) < item.getSecondInTimeLine();
+            }
+
             filteredQueue.add(queueItem);
             previousItem = queueItem;
         }
@@ -465,7 +554,8 @@ public class SimulatorPresenter2 {
         List<SimulatorDataItem> results = new ArrayList<>();
 
         for (BuildItemEntity item : mAllItems) {
-            if (item.getItemType() != BuildItemTypeEnum.Building || AppConstants.DEFAULT_STATE_ITEM_NAME.equals(item.getName())) {
+            if (item.getItemType() != BuildItemTypeEnum.Building || AppConstants.DEFAULT_STATE_ITEM_NAME.equals(item.getName())
+                || item.getName().contains("ReactorOn") || item.getName().contains("TechLabOn") || item.getName().contains("OrbitalCommand") || item.getName().contains("PlanetaryFortrees")) {
                 continue;
             }
 
@@ -481,16 +571,41 @@ public class SimulatorPresenter2 {
     private List<SimulatorDataItem> _getSpecialItems() {
         List<SimulatorDataItem> results = new ArrayList<>();
 
+        List<SimulatorDataItem> majorItems = new ArrayList<>();
+        List<SimulatorDataItem> normalItems = new ArrayList<>();
+        List<SimulatorDataItem> secondaryItems = new ArrayList<>();
+
         for (BuildItemEntity item : mAllItems) {
-            if (item.getItemType() != BuildItemTypeEnum.Special || item.getName().contains("Idle") || AppConstants.DEFAULT_STATE_ITEM_NAME.equals(item.getName())) {
+            if (item.getItemType() != BuildItemTypeEnum.Special || item.getName().contains("Idle") || AppConstants.DEFAULT_STATE_ITEM_NAME.equals(item.getName())
+                    || item.getName().contains("Lift") || item.getName().contains("Land")
+                    || item.getName().equals("SwitchToWarpgate") || item.getName().equals("SwitchToGateway")) {
+                continue;
+            }
+
+            if (item.getName().equals("CallMule") || item.getName().equals("ScannerSweep") || item.getName().equals("GoOutScv") || item.getName().equals("GasScv")) {
+                boolean satisfied = _isRequirementsSatisfied(item);
+                SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                majorItems.add(dataItem);
+                continue;
+            }
+
+            // if (item.getName().contains("FromReactor") || item.getName().contains("FromTechLab") || (item.getName().contains("Land") && (item.getName().contains("OnReactor") || item.getName().contains("OnTechLab")))) {
+            if (item.getName().equals("MineralScv") || item.getName().equals("ReturnScv") || item.getName().equals("CallSupplyDrop") || item.getName().equals("SalvageBunker")) {
+                boolean satisfied = _isRequirementsSatisfied(item);
+                SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                secondaryItems.add(dataItem);
                 continue;
             }
 
             boolean satisfied = _isRequirementsSatisfied(item);
 
             SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
-            results.add(dataItem);
+            normalItems.add(dataItem);
         }
+
+        results.addAll(majorItems);
+        results.addAll(normalItems);
+        results.addAll(secondaryItems);
 
         return results;
     }
@@ -544,8 +659,8 @@ public class SimulatorPresenter2 {
             }
 
             if (item.getName().equals("Gateway")) {
-                int freeWarpgates = stats.getStatValueByName("FreeGatewayForUnit");
-                int buzyWarpgates = stats.getStatValueByName("FreeGatewayForUnit" + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+                int freeWarpgates = stats.getStatValueByName("Gateway");
+                int buzyWarpgates = stats.getStatValueByName("Gateway" + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
 
                 // Active buildings first
                 for (int i = 0; i < freeWarpgates - buzyWarpgates; i++) {
@@ -578,10 +693,10 @@ public class SimulatorPresenter2 {
             }
 
             if (item.getName().equals("SwitchToWarpgate")) {
-                int freeWarpgates = stats.getStatValueByName("FreeWarpgateForUnit");
-                int buzyWarpgates = stats.getStatValueByName("FreeWarpgateForUnit" + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+                int freeWarpgates = stats.getStatValueByName("Warpgate");
+                int buzyWarpgates = stats.getStatValueByName("Warpgate" + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
 
-                int morphingWarpgates = stats.getStatValueByName("SwitchToWarpgate" + EngineConsts.BUILD_ITEM_ON_BUILDING_POSTFIX);
+                // int morphingWarpgates = stats.getStatValueByName("SwitchToWarpgate" + EngineConsts.BUILD_ITEM_ON_BUILDING_POSTFIX);
 
                 // Active buildings first
                 for (int i = 0; i < freeWarpgates - buzyWarpgates; i++) {
@@ -591,7 +706,7 @@ public class SimulatorPresenter2 {
                 }
 
                 // Buzy buildings next
-                for (int i = 0; i < (buzyWarpgates + morphingWarpgates);i++) {
+                for (int i = 0; i < (buzyWarpgates/* + morphingWarpgates*/);i++) {
                     SimulatorDataItem dataItem = _generateDataItem(item, false, false, 1);
                     dataItem.DisplayName = "Warpgate";
                     results.add(dataItem);
@@ -607,7 +722,7 @@ public class SimulatorPresenter2 {
 
             boolean isProdBuilding = _isProductionItem(item.getName());
 
-            if (!isProdBuilding && totalBuildingCount > 0) {
+            if ((!isProdBuilding || item.getName().contains("ReactorOn")) && totalBuildingCount > 0) {
                 SimulatorDataItem dataItem = _generateDataItem(item, true, false, totalBuildingCount);
                 secondaryBuildings.add(dataItem);
                 continue;
@@ -755,6 +870,7 @@ public class SimulatorPresenter2 {
     private List<SimulatorDataItem> _getNexuses(BuildItemStatistics stats) {
         int totalBuildingCount = stats.getStatValueByName("Nexus");
         int buzyBuildingCount = stats.getStatValueByName("Nexus" + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+        int castsCount = stats.getStatValueByName("TotalCasts");
 
         BuildItemEntity nexus = _getItemByName("Nexus");
 
@@ -763,6 +879,13 @@ public class SimulatorPresenter2 {
         // Active buildings first
         for (int i = 0; i < (totalBuildingCount - buzyBuildingCount); i++) {
             SimulatorDataItem dataItem = _generateDataItem(nexus, true, true, 1);
+            results.add(dataItem);
+        }
+
+        // If no CC available but it is possible to cast mule - we should add one available CC
+        if (results.size() == 0 && castsCount > 0) {
+            SimulatorDataItem dataItem = _generateDataItem(nexus, true, true, 1);
+            buzyBuildingCount--;
             results.add(dataItem);
         }
 
@@ -875,7 +998,7 @@ public class SimulatorPresenter2 {
     }
 
     private void _initBuildOrder() {
-        BuildOrderEntity mBuildEntity = new BuildOrderEntity("",
+        BuildOrderEntity buildEntity = new BuildOrderEntity("SYSTEM_SIMULATOR_RESULTS",
                 BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter(),
                 "",
                 BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter(),
@@ -885,7 +1008,7 @@ public class SimulatorPresenter2 {
                 System.currentTimeMillis(),
                 new ArrayList<String>());
 
-        mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(mBuildEntity, true);
+        mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, true);
 
         mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
     }

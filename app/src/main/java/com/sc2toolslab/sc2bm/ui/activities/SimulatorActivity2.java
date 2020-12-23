@@ -1,15 +1,18 @@
 package com.sc2toolslab.sc2bm.ui.activities;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sc2toolslab.sc2bm.R;
+import com.sc2toolslab.sc2bm.constants.AppConstants;
 import com.sc2toolslab.sc2bm.domain.BuildItemEntity;
-import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
 import com.sc2toolslab.sc2bm.engine.domain.BuildItemStatistics;
 import com.sc2toolslab.sc2bm.engine.domain.BuildOrderProcessorItem;
@@ -56,6 +59,10 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
     private View mItemInfoLayout;
     private Dialog mItemAddDialog;
 
+    private int mCountdown;
+    private View mCountdownLayout;
+    private Dialog mCountdownDialog;
+
     private ImageView mImgBaseMode;
     private ImageView mImgPlayPause;
     private ImageView mImgBuildStructure;
@@ -74,6 +81,8 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
     private AdapterView.OnItemClickListener mMainItemClickListener;
     private AdapterView.OnItemClickListener mBuildItemClickListener;
     private ViewTreeObserver.OnGlobalLayoutListener mBuildItemLayoutListener;
+
+    private String mBuildOrderToCompareWith;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +106,8 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
 
         String gameSpeed = prefs.getString(getString(R.string.pref_game_speed), "faster");
 
+        mBuildOrderToCompareWith = getIntent().getStringExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY);
+
         mPresenter = new SimulatorPresenter2(this, mStatsPanelFragment, gameSpeed);
 
         if (savedInstanceState != null) {
@@ -111,6 +122,24 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         }
 
         _renderStaticUi();
+
+        _showCountdown(3);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.searchable.
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            _navigateBack();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -125,6 +154,11 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         mPresenter.finish();
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        _navigateBack();
     }
 
     @Override
@@ -149,6 +183,30 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         mBtnArmy = (FrameLayout) findViewById(R.id.btnArmy);
         mBtnBaseMode = (FrameLayout) findViewById(R.id.btnBaseMode);
         mModeName = (TextView) findViewById(R.id.txtModeName);
+    }
+
+    private void _navigateBack() {
+        if (mPresenter.getIsPlaying()) {
+            mPresenter.changePlayMode();
+
+            _renderStaticUi();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Are you sure you want to finish simulation and navigate back?")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+        AlertDialog dlg = builder.create();
+        dlg.show();
     }
 
     //region ISimulatorView2 methods
@@ -218,16 +276,17 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
     public void onFinish(View view) {
         if (mPresenter.getIsPlaying()) {
             mPresenter.changePlayMode();
+
+            _renderStaticUi();
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Are you sure you want to finish simulation?")
+        builder.setTitle("Are you sure you want to finish simulation and check results?")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        BuildItemStatistics lastItemStatistics = mPresenter.getLastItemStatistics();
-                        NavigationManager.startSimulatorResultsActivity(SimulatorActivity2.this, lastItemStatistics);
-                        finish();
+                        NavigationManager.startSimulatorResultsActivity(SimulatorActivity2.this, mBuildOrderToCompareWith);
+                        //finish();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -377,14 +436,9 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
                     if (mPresenter.getCurrentMode() == SimulatorModeEnum.BUILD) {
                         mPresenter.addBuildItem(item.Name);
                     } else if (mPresenter.getCurrentMode() == SimulatorModeEnum.BASE) {
-                        // Show add item
                         mPresenter.setBuildStructure(item.Name);
-                        //_showItemInfoDialog(item);
-                        // NavigationManager.startBuildMakerAddItemActivity(this, item.Type, mPresenter.getSelectedIndex(), false);
                     } else if (mPresenter.getCurrentMode() == SimulatorModeEnum.MORPH) {
-                        // Show morph item
                         mPresenter.addBuildItem(item.Name);
-                        // NavigationManager.startBuildMakerAddItemActivity(this, item.Type, mPresenter.getSelectedIndex(), false);
                     } else if (mPresenter.getCurrentMode() == SimulatorModeEnum.SPECIAL) {
                         mPresenter.addBuildItem(item.Name);
                     }
@@ -436,6 +490,14 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
     }
 
     //endregion
+    private void _renderCountDown() {
+        if (mCountdownLayout == null) {
+            mCountdownLayout = getLayoutInflater().inflate(R.layout.fragment_simulator_countdown, (ViewGroup) findViewById(R.id.llToast));
+        }
+
+        _setCountdownSecond(mCountdownLayout, mCountdown);
+    }
+
     private void _renderItemAdd(List<SimulatorDataItem> items, BuildItemEntity buildStructure) {
         if (mItemInfoLayout == null) {
             mItemInfoLayout = getLayoutInflater().inflate(R.layout.fragment_simulator_build_items, (ViewGroup) findViewById(R.id.llToast));
@@ -493,6 +555,60 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         }
     }
 
+    private final Handler mHandler = new Handler();
+    private final Runnable mTimerTick = _loadTimerHandler();
+
+    private Runnable _loadTimerHandler() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                mCountdown--;
+
+                _renderCountDown();
+
+                if (mCountdown > 0) {
+                    _runTimer();
+                } else {
+                    mCountdownDialog.dismiss();
+                    mPresenter.changePlayMode();
+                    _renderStaticUi();
+                }
+            }
+        };
+    }
+
+    private void _runTimer() {
+        mHandler.removeCallbacks(mTimerTick);
+        mHandler.postDelayed(mTimerTick, 1000);
+    }
+
+    private void _showCountdown(int countdown) {
+        mCountdown = countdown;
+
+        _renderCountDown();
+
+        if (mCountdownDialog == null) {
+            mCountdownDialog = new Dialog(this, R.style.dialogTheme) {
+                @Override
+                public boolean onTouchEvent(MotionEvent event) {
+                    return false;
+                }
+            };
+            mCountdownDialog.setContentView(mCountdownLayout);
+            mCountdownDialog.setCancelable(false);
+            mCountdownDialog.setCanceledOnTouchOutside(false);
+            mCountdownDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    return false;
+                }
+            });
+        }
+
+        mCountdownDialog.show();
+        _runTimer();
+    }
+
     public void showItemsForStructure(List<SimulatorDataItem> items, BuildItemEntity buildStructure) {
         if (items == null || items.size() == 0) {
             return;
@@ -527,9 +643,18 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
     private void _setItemTitle(View layout, BuildItemEntity item) {
         TextView title = (TextView) layout.findViewById(R.id.txtName);
         if (item != null) {
-            title.setText(item.getDisplayName());
+            if (item.getName().equals("SwitchToWarpgate")) {
+                title.setText("Warpgate");
+            } else {
+                title.setText(item.getDisplayName());
+            }
         } else {
             title.setText("");
         }
+    }
+
+    private void _setCountdownSecond(View layout, int second) {
+        TextView title = (TextView) layout.findViewById(R.id.txtSecond);
+        title.setText(Integer.toString(second));
     }
 }

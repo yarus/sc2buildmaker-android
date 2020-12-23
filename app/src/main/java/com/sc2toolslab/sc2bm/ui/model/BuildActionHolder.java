@@ -9,4 +9,5 @@ public class BuildActionHolder {
     public ImageView imgIcon;
     public FrameLayout itemFrame;
     public TextView txtItemCount;
+    public ImageView imgBoosted;
 }
