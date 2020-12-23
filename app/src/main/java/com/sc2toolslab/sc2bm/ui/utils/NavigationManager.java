@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.sc2toolslab.sc2bm.constants.AppConstants;
 import com.sc2toolslab.sc2bm.domain.BuildItemTypeEnum;
+import com.sc2toolslab.sc2bm.engine.domain.BuildItemStatistics;
 import com.sc2toolslab.sc2bm.ui.activities.BuildEditActivity;
 import com.sc2toolslab.sc2bm.ui.activities.BuildMakerActivity;
 import com.sc2toolslab.sc2bm.ui.activities.BuildMakerAddItemActivity;
@@ -14,6 +15,8 @@ import com.sc2toolslab.sc2bm.ui.activities.BuildViewActivity;
 import com.sc2toolslab.sc2bm.ui.activities.MainActivity;
 import com.sc2toolslab.sc2bm.ui.activities.OnlineLibraryActivity;
 import com.sc2toolslab.sc2bm.ui.activities.SettingsActivity;
+import com.sc2toolslab.sc2bm.ui.activities.SimulatorActivity2;
+import com.sc2toolslab.sc2bm.ui.activities.SimulatorResultsActivity;
 
 public class NavigationManager {
 	private NavigationManager() {
@@ -59,6 +62,7 @@ public class NavigationManager {
 		Intent i = new Intent(from, BuildMakerAddItemActivity.class);
 		i.putExtra(AppConstants.BUILD_ITEM_TYPE_INTENT_FLAG, itemType.name());
 		i.putExtra("SelectedItemPosition", selectedItemIndex);
+		// i.putExtra("ShowOnlyAvailableToProduce", showOnlyAvailableToProduce);
 		from.startActivityForResult(i, 1);
 	}
 
@@ -72,6 +76,18 @@ public class NavigationManager {
 	public static void startOnlineLibraryActivity(Activity from) {
 		Intent i = new Intent(from, OnlineLibraryActivity.class);
 		//i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
+		from.startActivity(i);
+	}
+
+	public static void startSimulatorActivity(Activity from, String buildName) {
+		Intent i = new Intent(from, SimulatorActivity2.class);
+		i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
+		from.startActivity(i);
+	}
+
+	public static void startSimulatorResultsActivity(Activity from, String buildName) {
+		Intent i = new Intent(from, SimulatorResultsActivity.class);
+		i.putExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY, buildName);
 		from.startActivity(i);
 	}
 }

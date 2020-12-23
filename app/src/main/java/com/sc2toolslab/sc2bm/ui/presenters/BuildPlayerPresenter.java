@@ -45,7 +45,7 @@ public class BuildPlayerPresenter {
 		this.mGameSpeed = gameSpeed;
 
 		this.mBuildEntity = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(buildName);
-		this.mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(mBuildEntity);
+		this.mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(mBuildEntity, false);
 		this.mBuildOrder = mBuildProcessor.getCurrentBuildOrder();
 		this.mFilteredList = _getFilteredBuildItems(mBuildOrder);
 

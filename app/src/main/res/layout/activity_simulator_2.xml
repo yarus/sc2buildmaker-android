@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/appBar"
+            layout="@layout/app_bar"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHightlight"/>
+
+        <fragment
+            android:id="@+id/panelStats"
+            android:name="com.sc2toolslab.sc2bm.ui.fragments.BuildMakerStatsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            tools:layout="@layout/fragment_build_maker_stats"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="@color/colorHightlight"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="6">
+
+                <LinearLayout
+                    android:id="@+id/actionControls"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom|start"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+
+                    <FrameLayout
+                        android:id="@+id/btnBaseMode"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/builder_buttonbg">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.5"
+                            app:mrl_rippleColor="@color/colorHightlight"
+                            app:mrl_rippleDelayClick="false"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="true">
+
+                            <ImageView
+                                android:id="@+id/imgBaseMode"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:gravity="center"
+                                android:onClick="onChangeModeClick"
+                                android:src="@drawable/bi_commandcenter"
+                                android:tag="1" />
+
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/btnLarva"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/builder_buttonbg">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.5"
+                            app:mrl_rippleColor="@color/colorHightlight"
+                            app:mrl_rippleDelayClick="false"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="true">
+
+                            <ImageView
+                                android:id="@+id/imgMorphMode"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:tag="3"
+                                android:onClick="onChangeModeClick"
+                                android:gravity="center"
+                                android:src="@drawable/bi_spawnlarva" />
+
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/btnBuildStructure"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/builder_buttonbg">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.5"
+                            app:mrl_rippleColor="@color/colorHightlight"
+                            app:mrl_rippleDelayClick="false"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="true">
+
+                            <ImageView
+                                android:id="@+id/imgBuildStructure"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:tag="2"
+                                android:onClick="onChangeModeClick"
+                                android:gravity="center"
+                                android:src="@drawable/bi_scv" />
+
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/btnSpecial"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/builder_buttonbg">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.5"
+                            app:mrl_rippleColor="@color/colorHightlight"
+                            app:mrl_rippleDelayClick="false"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="true">
+
+                            <ImageView
+                                android:id="@+id/imgSpecial"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:tag="4"
+                                android:onClick="onChangeModeClick"
+                                android:gravity="center"
+                                android:src="@drawable/bi_orbitalcommand" />
+
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/btnArmy"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/builder_buttonbg">
+
+                        <com.balysv.materialripple.MaterialRippleLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            app:mrl_rippleAlpha="0.5"
+                            app:mrl_rippleColor="@color/colorHightlight"
+                            app:mrl_rippleDelayClick="false"
+                            app:mrl_rippleHover="true"
+                            app:mrl_rippleOverlay="true">
+
+                            <ImageView
+                                android:id="@+id/imgArmyMode"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:tag="5"
+                                android:onClick="onChangeModeClick"
+                                android:gravity="center"
+                                android:src="@drawable/bi_marine" />
+
+                        </com.balysv.materialripple.MaterialRippleLayout>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/colorHightlight"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#1B1B1B">
+
+                    <TextView
+                        android:id="@+id/txtModeName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="0.3"
+                        android:text="Base"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/colorHightlight"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="80dp">
+                    <GridView
+                        android:id="@+id/gvMainItems"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:columnWidth="@dimen/additemwidth"
+                        android:gravity="center"
+                        android:horizontalSpacing="@dimen/tile_list_item_spacing"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="vertical"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/tile_list_item_spacing"
+                        android:background="#363636">
+                    </GridView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="wrap_content"
+                android:background="@color/colorHightlight" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="#1B1B1B">
+
+                    <TextView
+                        android:id="@+id/textQueue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="queue"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:background="@color/colorHightlight"/>
+
+                <ListView
+                    android:id="@+id/actionsQueueList"
+                    android:background="#1B1B1B"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:cacheColorHint="#00000000"
+                    android:fastScrollEnabled="false"
+                    android:listSelector="@drawable/selector"
+                    android:scrollbarThumbVertical="@drawable/sb"
+                    android:transcriptMode="disabled">
+                </ListView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/colorHightlight"/>
+
+    <LinearLayout
+        android:id="@+id/editControls"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal|bottom|start"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.5"
+            android:background="@drawable/builder_buttonbg"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/btnReset"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:src="@drawable/reset_5sec"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="onReset"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="3"
+            android:background="@drawable/builder_buttonbg"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/btnPlayPause"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:src="@drawable/play"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="onPlayPause"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.5"
+            android:background="@drawable/builder_buttonbg"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/btnFinish"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:src="@drawable/icon_done"
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="onFinish"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

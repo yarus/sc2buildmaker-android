@@ -86,6 +86,10 @@ public class BuildOrderListAdapter extends ArrayAdapter<BuildOrderEntity> {
 		imgDownload.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if (mData.size() == 0) {
+					return;
+				}
+
 				BuildOrderEntity build = mData.get(position);
 
 				BuildOrdersProvider.getInstance(getContext()).saveBuildOrder(build);

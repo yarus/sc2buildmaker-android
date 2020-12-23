@@ -184,7 +184,12 @@ public class FileStorageHelper {
 		List<String> fileNames = new ArrayList<String>();
 		try {
 			InputStream fis = new FileInputStream(getRootDirectory() + File.separator + AppConstants.DELETED_FILES_CONFIG_NAME);
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+			BufferedReader br = null;
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+				br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+			} else {
+				br = new BufferedReader(new InputStreamReader(fis));
+			}
 			String fileName;
 			while ((fileName = br.readLine()) != null) {
 				fileNames.add(fileName);

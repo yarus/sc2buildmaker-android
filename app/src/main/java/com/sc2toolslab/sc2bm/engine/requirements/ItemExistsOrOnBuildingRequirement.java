@@ -29,8 +29,9 @@ public class ItemExistsOrOnBuildingRequirement implements IBuildItemRequirement 
 
 	@Override
 	public boolean isRequirementSatisfied(BuildItemStatistics stats) {
-		return stats.getStatValueByName(targetItemName) > 0
-				|| stats.getStatValueByName(targetItemName + EngineConsts.BUILD_ITEM_ON_BUILDING_POSTFIX) > 0;
+		int statValue = stats.getStatValueByName(targetItemName);
+		int statBuildingValue = stats.getStatValueByName(targetItemName + EngineConsts.BUILD_ITEM_ON_BUILDING_POSTFIX);
+		return statValue > 0 || statBuildingValue > 0;
 	}
 
 	public String getTargetItemName() {

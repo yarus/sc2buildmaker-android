@@ -1,6 +1,8 @@
 package com.sc2toolslab.sc2bm.datacontracts;
 
-public class RaceConstantsInfo {
+import java.io.Serializable;
+
+public class RaceConstantsInfo implements Serializable {
 	public String DefaultBaseBuildingName;
 
 	public String EnergyGeneratorBuildItemName;

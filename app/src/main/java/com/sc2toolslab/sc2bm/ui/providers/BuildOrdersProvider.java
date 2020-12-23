@@ -345,7 +345,7 @@ public class BuildOrdersProvider {
 			case "4.1.2":
 				return checkedConfig.equals(version);
 			default:
-				return checkedConfig.equals(version);
+				return checkedConfig.equals(version) || checkedConfig.equals(("4.11.3"));
 		}
 	}
 

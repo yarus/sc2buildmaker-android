@@ -17,6 +17,7 @@ import com.sc2toolslab.sc2bm.R;
 import com.sc2toolslab.sc2bm.constants.AppConstants;
 import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
+import com.sc2toolslab.sc2bm.ui.activities.MainActivity;
 import com.sc2toolslab.sc2bm.ui.model.BuildOrderListItemHolder;
 import com.sc2toolslab.sc2bm.ui.model.BuildOrderViewModel;
 import com.sc2toolslab.sc2bm.ui.providers.BuildOrdersProvider;
@@ -96,6 +97,7 @@ public class BuildListGridViewAdapter extends ArrayAdapter<BuildOrderEntity> {
 			holder.imgFavIcon = (ImageView) row.findViewById(R.id.imgFav);
 			holder.imgBuildMaker = (ImageView) row.findViewById(R.id.imgEdit);
 			holder.imgBuildPlayer = (ImageView) row.findViewById(R.id.imgPlay);
+			holder.imgSimulate = (ImageView) row.findViewById(R.id.imgSimulate);
 			row.setTag(holder);
 		} else {
 			holder = (BuildOrderListItemHolder) row.getTag();
@@ -104,6 +106,7 @@ public class BuildListGridViewAdapter extends ArrayAdapter<BuildOrderEntity> {
 		_setFavIconClickListener(holder.imgFavIcon, position);
 		_setEditClickListener(holder.imgBuildMaker, position);
 		_setPlayClickListener(holder.imgBuildPlayer, position);
+		_setSimulateClickListener(holder.imgSimulate, position);
 
 		_bindDataToHolder(holder, mData.get(position));
 
@@ -123,6 +126,23 @@ public class BuildListGridViewAdapter extends ArrayAdapter<BuildOrderEntity> {
 			@Override
 			public boolean onLongClick(View v) {
 				Toast.makeText(v.getContext(), "Open build player", Toast.LENGTH_LONG).show();
+				return true;
+			}
+		});
+	}
+
+	private void _setSimulateClickListener(ImageView imgSimulate, final int position) {
+		imgSimulate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				BuildOrderViewModel build = mData.get(position);
+				NavigationManager.startSimulatorResultsActivity((Activity) getContext(), build.Data.getName());
+			}
+		});
+		imgSimulate.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				Toast.makeText(v.getContext(), "Open Build Results", Toast.LENGTH_LONG).show();
 				return true;
 			}
 		});

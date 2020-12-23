@@ -62,7 +62,7 @@ public class NavDrawerFragment extends Fragment implements INavDrawerView {
 		return layout;
 	}
 
-	public void setUp(DrawerLayout drawerLayout, final Toolbar toolbar, final FloatingActionButton btnNew, NavDrawerMenuAdapter.INavDrawerItemSelectedListener listener) {
+	public void setUp(DrawerLayout drawerLayout, final Toolbar toolbar, NavDrawerMenuAdapter.INavDrawerItemSelectedListener listener) {
 		if (listener != null) {
 			mMenuAdapter.setClickListener(listener);
 		}
@@ -80,17 +80,11 @@ public class NavDrawerFragment extends Fragment implements INavDrawerView {
 				super.onDrawerClosed(drawerView);
 
 				getActivity().invalidateOptionsMenu();
-
-				btnNew.setVisibility(View.VISIBLE);
 			}
 
 			@Override
 			public void onDrawerSlide(View drawerView, float slideOffset) {
 				super.onDrawerSlide(drawerView, slideOffset);
-
-				if (btnNew.getVisibility() == View.VISIBLE) {
-					btnNew.setVisibility(View.GONE);
-				}
 
 				// Fade ActionBar effect
 				if (slideOffset < 0.6) {

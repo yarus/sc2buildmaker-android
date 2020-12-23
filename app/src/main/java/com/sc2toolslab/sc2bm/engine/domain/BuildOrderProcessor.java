@@ -3,6 +3,7 @@ package com.sc2toolslab.sc2bm.engine.domain;
 import com.sc2toolslab.sc2bm.domain.ApplicationException;
 import com.sc2toolslab.sc2bm.domain.ArgumentException;
 import com.sc2toolslab.sc2bm.domain.BuildItemEntity;
+import com.sc2toolslab.sc2bm.domain.BuildItemTypeEnum;
 import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
 import com.sc2toolslab.sc2bm.domain.RaceEnum;
 import com.sc2toolslab.sc2bm.engine.EngineConsts;
@@ -83,11 +84,14 @@ public class BuildOrderProcessor {
 
 		BuildItemEntity[] referenceToBuildItem = {buildItem};
 		BuildItemStatistics[] referenceToStatProvider = {statProvider};
+
 		try {
 			getCurrentStateData(buildItemName, /*out*/ referenceToBuildItem, /*out*/ referenceToStatProvider);
 		} catch (ArgumentException e) {
 			e.printStackTrace();
+			return false;
 		}
+
 		buildItem = referenceToBuildItem[0];
 		statProvider = referenceToStatProvider[0];
 
@@ -106,6 +110,11 @@ public class BuildOrderProcessor {
 				? this.mBuildOrder.getLastBuildItem().getSecondInTimeLine()
 				: 0;
 
+		// Only Default Item should be added at second 0
+		if (secondInTimeLine == 0 && !buildItem.getName().equals(EngineConsts.DEFAULT_STATE_ITEM_NAME)) {
+			secondInTimeLine = 1;
+		}
+
 		BuildOrderProcessorItem buildOrderItem = createBuildOrderItemWithAdjustedResourcesAndStatistics(
 				secondInTimeLine + secondsToAppropriateItem,
 				buildItem,
@@ -123,6 +132,40 @@ public class BuildOrderProcessor {
 		this.mConfig.getBuildManagerModules().adjustModulesStatsForUndo(this.mBuildOrder.getLastBuildItem(), this.mBuildOrder.getItemBefore(this.mBuildOrder.getLastBuildItem()));
 
 		mBuildOrder.removeLastItem();
+	}
+
+	public void cancelBuildItem(BuildOrderProcessorItem item) {
+		if (item == this.mBuildOrder.getLastBuildItem()) {
+			undoLastBuildItem();
+			return;
+		}
+
+		mBuildOrder.removeItem(item);
+
+		BuildItemStatistics stats = mBuildOrder.getLastBuildItem().getStatisticsProvider();
+
+		BuildItemEntity itemData = mConfig.getBuildItemsDictionary().getItem(item.getItemName());
+
+		if (itemData.getCostSupply() > 0) {
+			stats.setCurrentSupply(stats.getCurrentSupply() - itemData.getCostSupply());
+		}
+
+		stats.setGas(stats.getGas() + itemData.getCostGas());
+		stats.setMinerals(stats.getMinerals() + itemData.getCostMinerals());
+		stats.changeItemCountForName(itemData.getName() + EngineConsts.BUILD_ITEM_ON_BUILDING_POSTFIX, -1);
+		if (itemData.getProductionBuildingName() != null) {
+			stats.changeItemCountForName(itemData.getProductionBuildingName() + EngineConsts.BUZY_BUILD_ITEM_POSTFIX, -1);
+		}
+
+		if (itemData.getItemType() == BuildItemTypeEnum.Building && mConfig.getRace() == RaceEnum.Terran) {
+			stats.setWorkesOnMinerals(stats.getWorkesOnMinerals() + 1);
+		}
+		else if (itemData.getItemType() == BuildItemTypeEnum.Building && mConfig.getRace() == RaceEnum.Zerg) {
+			stats.setWorkesOnMinerals(stats.getWorkesOnMinerals() + 1);
+			stats.setWorkersCount(stats.getWorkersCount() + 1);
+		}
+
+		this.mConfig.getBuildManagerModules().adjustModulesStatsForUndo(item, mBuildOrder.getLastBuildItem());
 	}
 
 	public BuildItemStatistics getCurrentStatistics() {
@@ -149,8 +192,7 @@ public class BuildOrderProcessor {
 
 	private void findAppropriateSecondInTimeLine(BuildItemEntity buildItem, /*ref*/ BuildItemStatistics[] stats, /*out*/ int[] secondsToAppropriateItem) throws ArgumentException {
 		secondsToAppropriateItem[0] = 0;
-		while ((!this.isCurrentSecondHasEnoughResourcesToBuildItem(buildItem, stats[0])
-				|| !this.hasFreeProductionBuilding(stats[0], buildItem) || !this.isRequirementsSatisfied(buildItem, stats[0]))
+		while ((!this.isCurrentSecondHasEnoughResourcesToBuildItem(buildItem, stats[0]) || !this.hasFreeProductionBuilding(stats[0], buildItem) || !this.isRequirementsSatisfied(buildItem, stats[0]))
 				&& secondsToAppropriateItem[0] < this.mConfig.getGlobalConstants().getMaximumPeriodInSecondsForBuildPrediction()) {
 			secondsToAppropriateItem[0]++;
 
