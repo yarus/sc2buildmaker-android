@@ -79,8 +79,13 @@ public class BuildEditPresenter {
 
 		BuildOrderEntity initialBuild = BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(mBuildOrder.getName());
 
+		String description = mBuildOrder.getDescription();
+		if (description == null) {
+			description = "";
+		}
+
 		return !mBuildOrder.getName().equals(mView.getBuildName())
-				|| !mBuildOrder.getDescription().equals(mView.getDescription())
+				|| !description.equals(mView.getDescription())
 				|| mBuildOrder.getVsRace() != mView.getVsFaction()
 				|| !mBuildOrder.equals(initialBuild);
 	}
