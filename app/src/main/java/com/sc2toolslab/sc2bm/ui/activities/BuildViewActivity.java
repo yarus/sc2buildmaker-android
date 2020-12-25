@@ -129,6 +129,11 @@ public class BuildViewActivity extends AppCompatActivity implements IBuildView {
 			return true;
 		}
 
+		if (id == R.id.action_build_results) {
+			NavigationManager.startSimulatorResultsActivity(this, mPresenter.getBuildName());
+			return true;
+		}
+
 		if (id == R.id.action_build_editinfo) {
 			NavigationManager.startBuildEditActivity(this, mPresenter.getBuildName());
 			return true;

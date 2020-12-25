@@ -11,21 +11,6 @@ public class BuildItemStatistics implements Serializable {
 	private Map<String, Integer> statValuesDictionary = new HashMap<String, Integer>();
 	private RaceConstantsInfo raceConstants;
 
-	private Integer currentSupply = 0;
-	private Integer maximumSupply = 0;
-	private Integer workesOnMinerals = 0;
-	private Integer workersOnGas = 0;
-	private Integer workersOnWalk = 0;
-	private Integer basesCount = 0;
-	private Integer workersCount = 0;
-	private Integer minerals = 0;
-	private Integer gas = 0;
-	private Integer energy = 0;
-	private Integer milliMinerals = 0;
-	private Integer milliGas = 0;
-	private Integer milliEnergy = 0;
-	private Integer mulesOnMinerals = 0;
-
 	public BuildItemStatistics(RaceConstantsInfo raceSettings) {
 		this(raceSettings, new HashMap<String, Integer>());
 	}

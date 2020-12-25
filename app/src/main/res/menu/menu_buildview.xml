@@ -27,6 +27,12 @@
         app:showAsAction="ifRoom|collapseActionView"/>
 
     <item
+        android:id="@+id/action_build_results"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="Results"
+        app:showAsAction="ifRoom|collapseActionView"/>
+
+    <item
         android:id="@+id/action_build_delete"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="Delete"

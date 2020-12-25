@@ -43,7 +43,7 @@ public class BuildProcessorConfigurationProvider {
 		return result;
 	}
 
-	public BuildOrderProcessor getProcessorForBuild(BuildOrderEntity buildOrder) {
+	public BuildOrderProcessor getProcessorForBuild(BuildOrderEntity buildOrder, boolean forceReload) {
 		boolean needInitialization = true;
 
 		if (mBuildProcessor != null)
@@ -59,7 +59,7 @@ public class BuildProcessorConfigurationProvider {
 		}
 
 		BuildOrderProcessorData currentBuild = mBuildProcessor.getCurrentBuildOrder();
-		if (currentBuild == null || !currentBuild.getName().equals(buildOrder.getName())) {
+		if (currentBuild == null || !currentBuild.getName().equals(buildOrder.getName()) || forceReload) {
 			mBuildProcessor.loadBuildOrder(buildOrder);
 		}
 

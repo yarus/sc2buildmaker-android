@@ -66,7 +66,9 @@ public class WebApiHelper {
 		String urlString = getRequestUrl("MobileApi/GetBuilds");
 
 		try {
-			HttpRequest request = HttpRequest.get(urlString, true, "race", faction.toString(), "vsRace", "", "versionId", versionId, "name", name);
+			String race = faction != null ? faction.toString() : "";
+
+			HttpRequest request = HttpRequest.get(urlString, true, "race", race, "vsRace", "", "versionId", versionId, "name", name);
 
 			String response = request.body();
 

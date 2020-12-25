@@ -19,6 +19,8 @@
         \n- Huge collection of PRO build orders from ImbaBuilds.com and TeamLiquid.net</string>
 
     <string name="notification_appmarket_not_installed">Could not open Android market, please install the market app.</string>
+    <string name="notification_cant_open_youtube">Could not open video on YouTube!</string>
+    <string name="notification_cant_open_discord">Could not open Discord server!</string>
 
     <string name="pref_selectedConfig">selectedConfig</string>
     <string name="pref_FavoriteBuilds">FavoriteBuilds</string>
@@ -35,4 +37,7 @@
 
     <string name="unable_to_add_item_message">There is no appropriate point in timeline when it is possible to build this item</string>
     <string name="action_show_workers">Show workers</string>
+    <string name="title_activity_simulator">SC2 Simulator</string>
+    <string name="title_activity_simulator_results">SC2 Simulation Results</string>
+    <string name="splash_app_title">BUILD MAKER 5.0.5</string>
 </resources>

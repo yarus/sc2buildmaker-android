@@ -1,5 +1,7 @@
 package com.sc2toolslab.sc2bm.ui.providers;
 
+import com.sc2toolslab.sc2bm.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +23,12 @@ public class BuildOrderEncoder {
 	public BuildOrderEncoder() {
 		this.nameToCode = new HashMap<>();
 
-		nameToCode.put("DefaultItem", "ff");
+		nameToCode.put("DefaultItem", "mq");
+		nameToCode.put("StartIdle", "mw");
+		nameToCode.put("StopIdleIn3Seconds", "me");
+		nameToCode.put("StopIdleIn5Seconds", "mr");
+		nameToCode.put("StopIdleIn10Seconds", "mt");
+		nameToCode.put("StopIdleIn1Second", "my");
 
 		nameToCode.put("CommandCenter", "ao");
 		nameToCode.put("SupplyDepot", "ap");
@@ -157,6 +164,15 @@ public class BuildOrderEncoder {
 		nameToCode.put("MagFieldAccelerator", "fl");
 		nameToCode.put("ExplosiveShrapnelShells", "fz");
 
+		nameToCode.put("SmartServos", "fx");
+		nameToCode.put("EnhancedMunitions", "fc");
+
+		nameToCode.put("RecalibratedExplosives", "fv");
+		nameToCode.put("AdvancedBallistics", "fb");
+		nameToCode.put("EnhancedShockwaves", "fn");
+		nameToCode.put("NeosteelArmor", "fm");
+		nameToCode.put("RapidReignitionSystem", "gq");
+
 		//Protoss buildings
 		nameToCode.put("Nexus", "ae");
 		nameToCode.put("Pylon", "ar");
@@ -172,6 +188,8 @@ public class BuildOrderEncoder {
 		nameToCode.put("Assimilator", "af");
 		nameToCode.put("Gateway", "ag");
 		nameToCode.put("FleetBeacon", "ah");
+		nameToCode.put("ShieldBattery", "aj");
+
 		//Protoss units
 		nameToCode.put("ArchonFromTwoHT", "s");
 		nameToCode.put("Zealot", "w");
@@ -209,10 +227,7 @@ public class BuildOrderEncoder {
 		nameToCode.put("GoOutProbe", "ax");
 		nameToCode.put("ReturnProbe", "ac");
 		nameToCode.put("GasProbe", "av");
-		nameToCode.put("StartIdle", "ab");
-		nameToCode.put("StopIdleIn3Seconds", "an");
-		nameToCode.put("StopIdleIn5Seconds", "am");
-		nameToCode.put("StopIdleIn10Seconds", "sq");
+		nameToCode.put("MassRecall", "ab");
 		//Protoss upgrades
 		nameToCode.put("AirArmorLevel1", "sw");
 		nameToCode.put("AirArmorLevel2", "se");
@@ -240,6 +255,9 @@ public class BuildOrderEncoder {
 		nameToCode.put("AirWeaponsLevel1", "sn");
 		nameToCode.put("AirWeaponsLevel3", "sm");
 		nameToCode.put("AnionPulseCrystals", "dq");
+		nameToCode.put("ShadowStride", "dw");
+		nameToCode.put("TectonicDestabilizers", "de");
+		nameToCode.put("FluxVanes", "dr");
 
 		//Zerg buildings
 		nameToCode.put("Spire", "z");
@@ -319,5 +337,8 @@ public class BuildOrderEncoder {
 		nameToCode.put("EnduringLocusts", "sz");
 		nameToCode.put("FlyingLocusts", "sx");
 		nameToCode.put("MutateVentralSacs", "sc");
+		nameToCode.put("AdaptiveTalons", "sv");
+		nameToCode.put("SeismicSpines", "sb");
+		nameToCode.put("AnabolicSynthesis", "sn");
 	}
 }

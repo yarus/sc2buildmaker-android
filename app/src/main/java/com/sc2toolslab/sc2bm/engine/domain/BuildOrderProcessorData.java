@@ -196,6 +196,18 @@ public class BuildOrderProcessorData {
 		lastBuildItem = newLastItem;
 	}
 
+	public void removeItem(BuildOrderProcessorItem item) {
+		if (item == lastBuildItem) {
+			removeLastItem();
+			return;
+		}
+
+		buildItems.remove(item);
+		if (buildItems.size() > 0) {
+			lastBuildItem = buildItems.get(buildItems.size() - 1);
+		}
+	}
+
 	public BuildOrderProcessorItem getItemBefore(BuildOrderProcessorItem baseItem) {
 		List<BuildOrderProcessorItem> items = new ArrayList<>();
 

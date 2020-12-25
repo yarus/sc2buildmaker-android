@@ -58,6 +58,14 @@ public class MainPresenter implements IPresenter, NavDrawerMenuAdapter.INavDrawe
 
 				break;
 			}
+			case "tutorial": {
+				_openTutorial();
+				break;
+			}
+			case "discord": {
+				_openDiscord();
+				break;
+			}
 			case "sc2bm.com" : {
 				_openWebSite();
 				break;
@@ -90,6 +98,24 @@ public class MainPresenter implements IPresenter, NavDrawerMenuAdapter.INavDrawe
 				//Well if this also fails, we have run out of options, inform the user.
 				mView.showMessage(R.string.notification_appmarket_not_installed);
 			}
+		}
+	}
+
+	private void _openTutorial() {
+		Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=yyGx3ReHVaI"));
+		try {
+			mView.safeRunActivity(webIntent);
+		} catch (Exception ex) {
+			mView.showMessage(R.string.notification_cant_open_youtube);
+		}
+	}
+
+	private void _openDiscord() {
+		Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/YhbrvC84"));
+		try {
+			mView.safeRunActivity(webIntent);
+		} catch (Exception ex) {
+			mView.showMessage(R.string.notification_cant_open_discord);
 		}
 	}
 

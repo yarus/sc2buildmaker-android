@@ -8,4 +8,5 @@ public class AddBuildItemHolder {
 	public TextView txtItemName;
 	public ImageView imgItemImage;
 	public ImageView imgGrayed;
+	public ImageView imgItemStatus;
 }

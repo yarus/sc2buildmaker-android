@@ -14,4 +14,5 @@ public class BuildOrderListItemHolder {
 	public ImageView imgFavIcon;
 	public ImageView imgBuildMaker;
 	public ImageView imgBuildPlayer;
+	public ImageView imgSimulate;
 }

@@ -3,6 +3,7 @@ package com.sc2toolslab.sc2bm.ui.presenters;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.sc2toolslab.sc2bm.constants.AppConstants;
 import com.sc2toolslab.sc2bm.datacontracts.BuildOrderInfo;
 import com.sc2toolslab.sc2bm.datamanagers.InfoEntityConverter;
 import com.sc2toolslab.sc2bm.domain.BuildOrderEntity;
@@ -16,6 +17,7 @@ import com.sc2toolslab.sc2bm.ui.utils.WebApiHelper;
 import com.sc2toolslab.sc2bm.ui.views.IOnlineLibraryView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OnlineLibraryPresenter implements IPresenter {
 	private IOnlineLibraryView mView;
@@ -36,25 +38,28 @@ public class OnlineLibraryPresenter implements IPresenter {
 			@Override
 			protected Void doInBackground(Void... voids) {
 				String version = BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter();
-				RaceEnum faction = BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter();
+				RaceEnum faction = null; // BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter();
 
-				JsonBuildOrdersResponse response = WebApiHelper.getBuildOrders(mView.getContext(), version, faction, "");
-				if (response != null && response.Success) {
+				try {
+					JsonBuildOrdersResponse response = WebApiHelper.getBuildOrders(mView.getContext(), version, faction, "");
+					if (response != null && response.Success) {
+						ArrayList<BuildOrderEntity> result = _getEntitiesFromInfo(response.Result);
 
-					ArrayList<BuildOrderEntity> result = _getEntitiesFromInfo(response.Result);
+						ArrayList<BuildOrderEntity> uniqueBuilds = _getUniqueBuilds(result);
 
-					ArrayList<BuildOrderEntity> uniqueBuilds = _getUniqueBuilds(result);
-
-					if (uniqueBuilds.size() == 0) {
-						downloadedBuilds = null;
-						downloadErrorMessage = "There are no new build orders in online library";
-						return null;
+						if (uniqueBuilds.size() == 0) {
+							downloadedBuilds = null;
+							downloadErrorMessage = "There are no new build orders in online library";
+							return null;
+						} else {
+							downloadedBuilds = uniqueBuilds;
+						}
+					} else if(response != null && !response.Message.equals("")) {
+						downloadErrorMessage = response.Message;
 					} else {
-						downloadedBuilds = uniqueBuilds;
+						downloadErrorMessage = "There was an error while downloading build orders from www.sc2bm.com";
 					}
-				} else if(response != null && !response.Message.equals("")) {
-					downloadErrorMessage = response.Message;
-				} else {
+				} catch (Exception e) {
 					downloadErrorMessage = "There was an error while downloading build orders from www.sc2bm.com";
 				}
 
@@ -100,12 +105,17 @@ public class OnlineLibraryPresenter implements IPresenter {
 			BuildOrderEntity build = builds.get(i);
 
 			if (BuildOrdersProvider.getInstance(mView.getContext()).getBuildOrderByName(build.getName()) == null) {
-				BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(build);
-				BuildOrderProcessorData boData = processor.getCurrentBuildOrder();
+				try {
+					BuildOrderProcessor processor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(build, true);
+					BuildOrderProcessorData boData = processor.getCurrentBuildOrder();
 
-				build.setBuildLengthInSeconds(boData.getBuildLengthInSeconds());
+					build.setBuildLengthInSeconds(boData.getBuildLengthInSeconds());
 
-				uniqueBuilds.add(build);
+					uniqueBuilds.add(build);
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
