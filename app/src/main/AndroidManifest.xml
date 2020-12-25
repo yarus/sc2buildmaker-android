@@ -61,6 +61,7 @@
         <activity
             android:name=".ui.activities.BuildViewActivity"
             android:label="Build Order View"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".ui.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -72,6 +73,7 @@
             android:label="Edit Build Info" />
         <activity
             android:name=".ui.activities.BuildMakerActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="Build Maker" />
         <activity
             android:name=".ui.activities.BuildPlayerActivity"
@@ -79,6 +81,7 @@
             android:label="Build Player" />
         <activity
             android:name=".ui.activities.BuildMakerAddItemActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:theme="@style/dialogTheme" />
         <activity android:name=".ui.activities.BuildShareActivity">
             <intent-filter>
@@ -92,6 +95,7 @@
         <activity
             android:name=".ui.activities.OnlineLibraryActivity"
             android:label="Online Library"
+            android:configChanges="keyboardHidden|orientation"
             android:parentActivityName=".ui.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

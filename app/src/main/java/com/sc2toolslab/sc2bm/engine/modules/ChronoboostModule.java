@@ -288,13 +288,14 @@ public class ChronoboostModule extends BuildManagerModuleBase {
 
 	private String getFirstNormalProdBuilding(BuildItemStatistics stats, BuildItemEntity item) {
 		int totalBuzyProdBuilding = stats.getStatValueByName(item.getProductionBuildingName() + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+		Map<String, Integer> buzyChronoedProdBuildings = stats.getStatsWithKeyContains("ChronoBuzy" + item.getProductionBuildingName());
 		Map<String, Integer> buzyNormalProdBuildings = stats.getStatsWithKeyContains("NormalBuzy" + item.getProductionBuildingName());
 		List<String> buzyProdNames = new ArrayList<>(buzyNormalProdBuildings.keySet());
 
 		if (totalBuzyProdBuilding > buzyNormalProdBuildings.size()) {
 			for (int i = 1; i <= totalBuzyProdBuilding; i++)
 			{
-				String tmpBuildingName = item.getProductionBuildingName() + i;
+				String tmpBuildingName = item.getProductionBuildingName() + (buzyChronoedProdBuildings.size() + i);
 				if (!buzyProdNames.contains(tmpBuildingName)) {
 					return tmpBuildingName;
 				}

@@ -392,10 +392,8 @@ public class SimulatorPresenter2 {
 
                 if (baseItem != null && baseItem.getProductionBuildingName() != null && baseItem.getProductionBuildingName().equals(name)) {
                     boolean satisfied = _isRequirementsSatisfied(item);
-                    if (satisfied) {
-                        SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
-                        results.add(dataItem);
-                    }
+                    SimulatorDataItem dataItem = _generateDataItem(item, satisfied, satisfied, 1);
+                    results.add(dataItem);
                 }
 
                 continue;
@@ -728,15 +726,24 @@ public class SimulatorPresenter2 {
                 continue;
             }
 
-            int totalReactors = stats.getStatValueByName("ReactorOn" + item.getName());
-            int buzyReactors = stats.getStatValueByName("ReactorOn" + item.getName() + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+            // int totalActiveBuildings = (totalBuildingCount + totalReactors) - (buzyBuildingCount + buzyReactors);
+            int totalActiveBuildings = (totalBuildingCount - buzyBuildingCount);
 
-            int totalActiveBuildings = (totalBuildingCount + totalReactors) - (buzyBuildingCount + buzyReactors);
-
+            /*
             if (totalActiveBuildings > totalBuildingCount) {
                 totalActiveBuildings = totalBuildingCount;
             } else if (totalActiveBuildings < 0) {
                 totalActiveBuildings = 0;
+            }
+            */
+
+            if (totalActiveBuildings == 0) {
+                int totalReactors = stats.getStatValueByName("ReactorOn" + item.getName());
+                int buzyReactors = stats.getStatValueByName("ReactorOn" + item.getName() + EngineConsts.BUZY_BUILD_ITEM_POSTFIX);
+
+                if (totalReactors > buzyReactors) {
+                    totalActiveBuildings++;
+                }
             }
 
             // Active buildings first
@@ -998,15 +1005,23 @@ public class SimulatorPresenter2 {
     }
 
     private void _initBuildOrder() {
-        BuildOrderEntity buildEntity = new BuildOrderEntity("SYSTEM_SIMULATOR_RESULTS",
-                BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter(),
-                "",
-                BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter(),
-                RaceEnum.NotDefined,
-                0,
-                System.currentTimeMillis(),
-                System.currentTimeMillis(),
-                new ArrayList<String>());
+        BuildOrderProcessorData loadedBuild = BuildProcessorConfigurationProvider.getInstance().getLoadedBuildOrder();
+
+        BuildOrderEntity buildEntity;
+
+        if (loadedBuild != null && loadedBuild.getName().equals("SYSTEM_SIMULATOR_RESULTS")) {
+            buildEntity = loadedBuild.generateBuildOrderEntity();
+        } else {
+            buildEntity = new BuildOrderEntity("SYSTEM_SIMULATOR_RESULTS",
+                    BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter(),
+                    "",
+                    BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter(),
+                    RaceEnum.NotDefined,
+                    0,
+                    System.currentTimeMillis(),
+                    System.currentTimeMillis(),
+                    new ArrayList<String>());
+        }
 
         mBuildProcessor = BuildProcessorConfigurationProvider.getInstance().getProcessorForBuild(buildEntity, true);
 

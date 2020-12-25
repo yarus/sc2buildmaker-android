@@ -37,15 +37,21 @@ public class BuildMakerPresenter implements IPresenter {
 		BuildOrderEntity buildEntity;
 
 		if (buildName.equals("")) {
-			buildEntity = new BuildOrderEntity("",
-					BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter(),
-					"",
-					BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter(),
-					RaceEnum.NotDefined,
-					0,
-					System.currentTimeMillis(),
-					System.currentTimeMillis(),
-					new ArrayList<String>());
+			BuildOrderProcessorData loadedBuild = BuildProcessorConfigurationProvider.getInstance().getLoadedBuildOrder();
+
+			if (loadedBuild != null && loadedBuild.getName().equals("")) {
+				buildEntity = loadedBuild.generateBuildOrderEntity();
+			} else {
+				buildEntity = new BuildOrderEntity("",
+						BuildOrdersProvider.getInstance(mView.getContext()).getVersionFilter(),
+						"",
+						BuildOrdersProvider.getInstance(mView.getContext()).getFactionFilter(),
+						RaceEnum.NotDefined,
+						0,
+						System.currentTimeMillis(),
+						System.currentTimeMillis(),
+						new ArrayList<String>());
+			}
 		} else if (buildName.equals("SYSTEM_SIMULATOR_RESULTS")) {
 			BuildOrderProcessorData loadedBuild = BuildProcessorConfigurationProvider.getInstance().getLoadedBuildOrder();
 			buildEntity = loadedBuild.generateBuildOrderEntity();

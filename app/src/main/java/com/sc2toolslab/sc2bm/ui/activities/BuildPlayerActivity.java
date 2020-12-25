@@ -209,6 +209,8 @@ public class BuildPlayerActivity extends FragmentListActivity implements IBuildP
 					}
 				}
 			}
+		} else {
+			this.showMessage("TextToSpeech android feature is not enabled on your device! Please make sure to enable it to be able to use Voice Helper feature of SC2BuildMaker app.");
 		}
 	}
 

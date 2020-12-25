@@ -121,9 +121,15 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
             }
         }
 
+        if (mPresenter.getCurrentSecond() > 0) {
+            mCountdown = 0;
+        } else {
+            mCountdown = 3;
+        }
+
         _renderStaticUi();
 
-        _showCountdown(3);
+        _showCountdown();
     }
 
     @Override
@@ -224,6 +230,20 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         _renderMainItems(mMainList);
 
         if (mIsItemAddShown) {
+            boolean hasEnabledItems = false;
+            for(SimulatorDataItem item : buildItemsForStructure) {
+                if (item.IsEnabled && item.IsClickable) {
+                    hasEnabledItems = true;
+                    break;
+                }
+            }
+
+            if (!hasEnabledItems && mItemAddDialog.isShowing()) {
+                mIsItemAddShown = false;
+                mItemAddDialog.cancel();
+                mItemAddDialog.dismiss();
+            }
+
             _renderItemAdd(buildItemsForStructure, buildStructure);
         }
     }
@@ -545,8 +565,8 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
                     SimulatorDataItem item = finalAdapter.getItem(position);
                     if (item.IsEnabled && item.IsClickable) {
                         mPresenter.addBuildItem(item.Name);
-                        mIsItemAddShown = false;
-                        mItemAddDialog.dismiss();
+                        // mIsItemAddShown = false;
+                        // mItemAddDialog.dismiss();
                     }
                 }
             };
@@ -582,8 +602,10 @@ public class SimulatorActivity2 extends AppCompatActivity implements ISimulatorV
         mHandler.postDelayed(mTimerTick, 1000);
     }
 
-    private void _showCountdown(int countdown) {
-        mCountdown = countdown;
+    private void _showCountdown() {
+        if (mCountdown == 0) {
+            return;
+        }
 
         _renderCountDown();
 

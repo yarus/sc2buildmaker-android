@@ -13,7 +13,7 @@ public class MenuManager {
 	public static List<NavDrawerMenuItem> getMenuItems() {
 		List<NavDrawerMenuItem> menuItems = new ArrayList<>();
 
-		int[] icons = { R.mipmap.ic_buy, R.mipmap.ic_rate, R.drawable.build_structure_terran, R.drawable.build_structure_protoss, R.mipmap.ic_launcher, R.mipmap.ic_feedback, R.mipmap.ic_settings, R.mipmap.ic_question };
+		int[] icons = { R.mipmap.ic_buy, R.mipmap.ic_rate, android.R.drawable.ic_menu_help, android.R.drawable.sym_action_chat, R.mipmap.ic_launcher, android.R.drawable.ic_dialog_email, R.mipmap.ic_settings, R.mipmap.ic_question };
 		String[] titles = { "Buy", "Rate", "Tutorial", "Discord", "sc2bm.com", "Feedback", "Settings", "About" };
 
 		for (int i = 0; i < titles.length && i < icons.length; i++) {

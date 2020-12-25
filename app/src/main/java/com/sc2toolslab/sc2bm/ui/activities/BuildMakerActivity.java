@@ -59,7 +59,13 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 
 		mStatsPanelFragment = (BuildMakerStatsFragment) getSupportFragmentManager().findFragmentById(R.id.panelStats);
 
-		mPresenter = new BuildMakerPresenter(this, mStatsPanelFragment, getIntent().getStringExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY));
+		String buildName = getIntent().getStringExtra(AppConstants.BUILD_ORDER_NAME_INTENT_KEY);
+
+		if (savedInstanceState != null) {
+			buildName = savedInstanceState.getString("BuildName");
+		}
+
+		mPresenter = new BuildMakerPresenter(this, mStatsPanelFragment, buildName);
 
 		_scrollListViewToBottom();
 	}
@@ -71,6 +77,12 @@ public class BuildMakerActivity extends AppCompatActivity implements IBuildMaker
 		_initControls();
 
 		mPresenter.setSelectedIndex(mPresenter.getSelectedIndex());
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putString("BuildName", mPresenter.getBuildName());
 	}
 
 	@Override

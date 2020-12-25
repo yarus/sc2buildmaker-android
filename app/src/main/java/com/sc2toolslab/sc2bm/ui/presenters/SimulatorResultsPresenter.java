@@ -266,13 +266,7 @@ public class SimulatorResultsPresenter {
     private String _getTitle() {
         String header;
         if (isFreeSimulationMode()) {
-            String baseBuild = getBuildName();
-
-            if (baseBuild.equals("")) {
-                header = "Free Simulation";
-            } else {
-                header = baseBuild;
-            }
+            header = "Free Simulation";
         } else {
             header = getBuildName();
         }
